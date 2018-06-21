@@ -77,21 +77,23 @@ func TestOrderedMap(t *testing.T) {
 		t.Fatal(err)
 	}
 	if bytes.Compare(data1, data2) != 0 {
-		t.Fatal("byte arrays are not the same")
+		t.Fatal("byte arrays are not the same\n", data1, "\n", data2)
 	}
 }
 
 func TestUnorderedMap(t *testing.T) {
-	var b proto.Buffer
-	b.SetDeterministic(true)
 	m := getTestMap()
 	in := &UnorderedMap{
 		StringMap: m,
 	}
-	if err := b.Marshal(in); err != nil {
+
+	var b1 proto.Buffer
+	b1.SetDeterministic(true)
+	if err := b1.Marshal(in); err != nil {
 		t.Fatalf("Marshal failed: %v", err)
 	}
-	data1 := b.Bytes()
+	data1 := b1.Bytes()
+
 	out := &UnorderedMap{}
 	err := proto.Unmarshal(data1, out)
 	if err != nil {
@@ -100,11 +102,15 @@ func TestUnorderedMap(t *testing.T) {
 	if err := in.VerboseEqual(out); err != nil {
 		t.Fatal(err)
 	}
-	data2, err := proto.Marshal(in)
-	if err != nil {
-		t.Fatal(err)
+
+	var b2 proto.Buffer
+	b2.SetDeterministic(true)
+	if err := b2.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
 	}
+	data2 := b2.Bytes()
+
 	if bytes.Compare(data1, data2) != 0 {
-		t.Fatal("byte arrays are not the same")
+		t.Fatal("byte arrays are not the same:\n", data1, "\n", data2)
 	}
 }
