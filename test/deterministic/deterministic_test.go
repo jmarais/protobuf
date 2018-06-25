@@ -54,7 +54,7 @@ func getTestMap() map[string]string {
 
 }
 
-func TestOrderedMap(t *testing.T) {
+func _TestOrderedMap(t *testing.T) {
 	var b proto.Buffer
 	m := getTestMap()
 	in := &OrderedMap{
@@ -95,6 +95,40 @@ func TestUnorderedMap(t *testing.T) {
 	data1 := b1.Bytes()
 
 	out := &UnorderedMap{}
+	err := proto.Unmarshal(data1, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := in.VerboseEqual(out); err != nil {
+		t.Fatal(err)
+	}
+
+	var b2 proto.Buffer
+	b2.SetDeterministic(true)
+	if err := b2.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data2 := b2.Bytes()
+
+	if bytes.Compare(data1, data2) != 0 {
+		t.Fatal("byte arrays are not the same:\n", data1, "\n", data2)
+	}
+}
+
+func _TestMapNoMarshaler(t *testing.T) {
+	m := getTestMap()
+	in := &MapNoMarshaler{
+		StringMap: m,
+	}
+
+	var b1 proto.Buffer
+	b1.SetDeterministic(true)
+	if err := b1.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data1 := b1.Bytes()
+
+	out := &MapNoMarshaler{}
 	err := proto.Unmarshal(data1, out)
 	if err != nil {
 		t.Fatal(err)
