@@ -2344,33 +2344,30 @@ func (g *Generator) generateMessage(message *Descriptor) {
 	g.In()
 	if gogoproto.IsMarshaler(g.file.FileDescriptorProto, message.DescriptorProto) ||
 		gogoproto.IsUnsafeMarshaler(g.file.FileDescriptorProto, message.DescriptorProto) {
+		g.P("b = b[:cap(b)]")
+		g.P("var n int")
+		g.P("var err error")
+
 		if gogoproto.IsStableMarshaler(g.file.FileDescriptorProto, message.DescriptorProto) {
-			g.P("b = b[:cap(b)]")
-			g.P("n, err := m.MarshalTo(b)")
-			g.P("if err != nil {")
-			g.In()
-			g.P("return nil, err")
-			g.Out()
-			g.P("}")
-			g.P("return b[:n], nil")
+			g.P("n, err = m.MarshalTo(b)")
 		} else {
 			g.P("if deterministic {")
 			g.In()
-			g.P("return xxx_messageInfo_", ccTypeName, ".Marshal(b, m, deterministic)")
+			g.P("n, err = m.DeterministicMarshalTo(b)")
+			g.Out()
 			g.P("} else {")
 			g.In()
-			g.P("b = b[:cap(b)]")
-			g.P("n, err := m.MarshalTo(b)")
-			g.P("if err != nil {")
-			g.In()
-			g.P("return nil, err")
-			g.Out()
+			g.P("n, err = m.MarshalTo(b)")
 			g.P("}")
 			g.Out()
-			g.P("return b[:n], nil")
-			g.Out()
-			g.P("}")
 		}
+		g.P("if err != nil {")
+		g.In()
+		g.P("return nil, err")
+		g.Out()
+		g.P("}")
+		g.P("return b[:n], nil")
+		g.Out()
 	} else {
 		g.P("return xxx_messageInfo_", ccTypeName, ".Marshal(b, m, deterministic)")
 	}

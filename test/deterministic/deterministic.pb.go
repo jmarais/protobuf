@@ -41,7 +41,9 @@ func (m *OrderedMap) XXX_Unmarshal(b []byte) error {
 }
 func (m *OrderedMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	n, err = m.MarshalTo(b)
 	if err != nil {
 		return nil, err
 	}
@@ -83,16 +85,18 @@ func (m *UnorderedMap) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UnorderedMap.Unmarshal(m, b)
 }
 func (m *UnorderedMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	var n int
+	var err error
 	if deterministic {
-		return xxx_messageInfo_UnorderedMap.Marshal(b, m, deterministic)
+		n, err = m.DeterministicMarshalTo(b)
 	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
+		n, err = m.MarshalTo(b)
 	}
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
 }
 func (dst *UnorderedMap) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_UnorderedMap.Merge(dst, src)
@@ -386,7 +390,7 @@ func (m *OrderedMap) MarshalTo(dAtA []byte) (int, error) {
 	_ = l
 	if len(m.StringMap) > 0 {
 		keysForStringMap := make([]string, 0, len(m.StringMap))
-		for k, _ := range m.StringMap {
+		for k := range m.StringMap {
 			keysForStringMap = append(keysForStringMap, string(k))
 		}
 		github_com_gogo_protobuf_sortkeys.Strings(keysForStringMap)
@@ -428,10 +432,43 @@ func (m *UnorderedMap) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if len(m.StringMap) > 0 {
-		for k, _ := range m.StringMap {
+		for k := range m.StringMap {
 			dAtA[i] = 0xa
 			i++
 			v := m.StringMap[k]
+			mapSize := 1 + len(k) + sovDeterministic(uint64(len(k))) + 1 + len(v) + sovDeterministic(uint64(len(v)))
+			i = encodeVarintDeterministic(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintDeterministic(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintDeterministic(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *UnorderedMap) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.StringMap) > 0 {
+		keysForStringMap := make([]string, 0, len(m.StringMap))
+		for k := range m.StringMap {
+			keysForStringMap = append(keysForStringMap, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForStringMap)
+		for _, k := range keysForStringMap {
+			dAtA[i] = 0xa
+			i++
+			v := m.StringMap[string(k)]
 			mapSize := 1 + len(k) + sovDeterministic(uint64(len(k))) + 1 + len(v) + sovDeterministic(uint64(len(v)))
 			i = encodeVarintDeterministic(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0xa

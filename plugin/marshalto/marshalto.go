@@ -349,7 +349,7 @@ func (this orderFields) Swap(i, j int) {
 	this[i], this[j] = this[j], this[i]
 }
 
-func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.FileDescriptor, message *generator.Descriptor, field *descriptor.FieldDescriptorProto) {
+func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.FileDescriptor, message *generator.Descriptor, field *descriptor.FieldDescriptorProto, stable bool) {
 	fieldname := p.GetOneOfFieldName(message, field)
 	nullable := gogoproto.IsNullable(field)
 	repeated := field.IsRepeated()
@@ -678,7 +678,7 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 			nullable, valuegoTyp, valuegoAliasTyp = generator.GoMapValueTypes(field, m.ValueField, valuegoTyp, valuegoAliasTyp)
 			keyKeySize := keySize(1, wireToType(keywire))
 			valueKeySize := keySize(2, wireToType(valuewire))
-			if gogoproto.IsStableMarshaler(file.FileDescriptorProto, message.DescriptorProto) {
+			if stable {
 				keysName := `keysFor` + fieldname
 				p.P(keysName, ` := make([]`, keygoTyp, `, 0, len(m.`, fieldname, `))`)
 				p.P(`for k, _ := range m.`, fieldname, ` {`)
@@ -718,7 +718,7 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				descriptor.FieldDescriptorProto_TYPE_SINT64:
 				sum = append(sum, `soz`+p.localName+`(uint64(k))`)
 			}
-			if gogoproto.IsStableMarshaler(file.FileDescriptorProto, message.DescriptorProto) {
+			if stable {
 				p.P(`v := m.`, fieldname, `[`, keygoAliasTyp, `(k)]`)
 			} else {
 				p.P(`v := m.`, fieldname, `[k]`)
@@ -1076,13 +1076,12 @@ func (p *marshalto) Generate(file *generator.FileDescriptor) {
 		if message.DescriptorProto.GetOptions().GetMapEntry() {
 			continue
 		}
-		ccTypeName := generator.CamelCaseSlice(message.TypeName())
 		if !gogoproto.IsMarshaler(file.FileDescriptorProto, message.DescriptorProto) &&
 			!gogoproto.IsUnsafeMarshaler(file.FileDescriptorProto, message.DescriptorProto) {
 			continue
 		}
-		p.atleastOne = true
 
+		ccTypeName := generator.CamelCaseSlice(message.TypeName())
 		p.P(`func (m *`, ccTypeName, `) Marshal() (dAtA []byte, err error) {`)
 		p.In()
 		if gogoproto.IsProtoSizer(file.FileDescriptorProto, message.DescriptorProto) {
@@ -1101,84 +1100,12 @@ func (p *marshalto) Generate(file *generator.FileDescriptor) {
 		p.Out()
 		p.P(`}`)
 		p.P(``)
-		p.P(`func (m *`, ccTypeName, `) MarshalTo(dAtA []byte) (int, error) {`)
-		p.In()
-		p.P(`var i int`)
-		p.P(`_ = i`)
-		p.P(`var l int`)
-		p.P(`_ = l`)
-		fields := orderFields(message.GetField())
-		sort.Sort(fields)
-		oneofs := make(map[string]struct{})
-		for _, field := range message.Field {
-			oneof := field.OneofIndex != nil
-			if !oneof {
-				proto3 := gogoproto.IsProto3(file.FileDescriptorProto)
-				p.generateField(proto3, numGen, file, message, field)
-			} else {
-				fieldname := p.GetFieldName(message, field)
-				if _, ok := oneofs[fieldname]; !ok {
-					oneofs[fieldname] = struct{}{}
-					p.P(`if m.`, fieldname, ` != nil {`)
-					p.In()
-					p.P(`nn`, numGen.Next(), `, err := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
-					p.P(`if err != nil {`)
-					p.In()
-					p.P(`return 0, err`)
-					p.Out()
-					p.P(`}`)
-					p.P(`i+=nn`, numGen.Current())
-					p.Out()
-					p.P(`}`)
-				}
-			}
-		}
-		if message.DescriptorProto.HasExtension() {
-			if gogoproto.HasExtensionsMap(file.FileDescriptorProto, message.DescriptorProto) {
-				p.P(`n, err := `, p.protoPkg.Use(), `.EncodeInternalExtension(m, dAtA[i:])`)
-				p.P(`if err != nil {`)
-				p.In()
-				p.P(`return 0, err`)
-				p.Out()
-				p.P(`}`)
-				p.P(`i+=n`)
-			} else {
-				p.P(`if m.XXX_extensions != nil {`)
-				p.In()
-				p.P(`i+=copy(dAtA[i:], m.XXX_extensions)`)
-				p.Out()
-				p.P(`}`)
-			}
-		}
-		if gogoproto.HasUnrecognized(file.FileDescriptorProto, message.DescriptorProto) {
-			p.P(`if m.XXX_unrecognized != nil {`)
-			p.In()
-			p.P(`i+=copy(dAtA[i:], m.XXX_unrecognized)`)
-			p.Out()
-			p.P(`}`)
-		}
 
-		p.P(`return i, nil`)
-		p.Out()
-		p.P(`}`)
-		p.P()
-
-		//Generate MarshalTo methods for oneof fields
-		m := proto.Clone(message.DescriptorProto).(*descriptor.DescriptorProto)
-		for _, field := range m.Field {
-			oneof := field.OneofIndex != nil
-			if !oneof {
-				continue
-			}
-			ccTypeName := p.OneOfTypeName(message, field)
-			p.P(`func (m *`, ccTypeName, `) MarshalTo(dAtA []byte) (int, error) {`)
-			p.In()
-			p.P(`i := 0`)
-			vanity.TurnOffNullableForNativeTypes(field)
-			p.generateField(false, numGen, file, message, field)
-			p.P(`return i, nil`)
-			p.Out()
-			p.P(`}`)
+		if gogoproto.IsStableMarshaler(file.FileDescriptorProto, message.DescriptorProto) {
+			p.generateMarshalTo(file, message, numGen, "MarshalTo", true)
+		} else {
+			p.generateMarshalTo(file, message, numGen, "MarshalTo", false)
+			p.generateMarshalTo(file, message, numGen, "DeterministicMarshalTo", true)
 		}
 	}
 
@@ -1197,7 +1124,91 @@ func (p *marshalto) Generate(file *generator.FileDescriptor) {
 		p.Out()
 		p.P(`}`)
 	}
+}
 
+func (p *marshalto) generateMarshalTo(file *generator.FileDescriptor, message *generator.Descriptor, numGen NumGen, name string, stable bool) {
+	p.atleastOne = true
+	ccTypeName := generator.CamelCaseSlice(message.TypeName())
+
+	p.P(`func (m *`, ccTypeName, `) `, name, `(dAtA []byte) (int, error) {`)
+	p.In()
+	p.P(`var i int`)
+	p.P(`_ = i`)
+	p.P(`var l int`)
+	p.P(`_ = l`)
+	fields := orderFields(message.GetField())
+	sort.Sort(fields)
+	oneofs := make(map[string]struct{})
+	for _, field := range message.Field {
+		oneof := field.OneofIndex != nil
+		if !oneof {
+			proto3 := gogoproto.IsProto3(file.FileDescriptorProto)
+			p.generateField(proto3, numGen, file, message, field, stable)
+		} else {
+			fieldname := p.GetFieldName(message, field)
+			if _, ok := oneofs[fieldname]; !ok {
+				oneofs[fieldname] = struct{}{}
+				p.P(`if m.`, fieldname, ` != nil {`)
+				p.In()
+				p.P(`nn`, numGen.Next(), `, err := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
+				p.P(`if err != nil {`)
+				p.In()
+				p.P(`return 0, err`)
+				p.Out()
+				p.P(`}`)
+				p.P(`i+=nn`, numGen.Current())
+				p.Out()
+				p.P(`}`)
+			}
+		}
+	}
+	if message.DescriptorProto.HasExtension() {
+		if gogoproto.HasExtensionsMap(file.FileDescriptorProto, message.DescriptorProto) {
+			p.P(`n, err := `, p.protoPkg.Use(), `.EncodeInternalExtension(m, dAtA[i:])`)
+			p.P(`if err != nil {`)
+			p.In()
+			p.P(`return 0, err`)
+			p.Out()
+			p.P(`}`)
+			p.P(`i+=n`)
+		} else {
+			p.P(`if m.XXX_extensions != nil {`)
+			p.In()
+			p.P(`i+=copy(dAtA[i:], m.XXX_extensions)`)
+			p.Out()
+			p.P(`}`)
+		}
+	}
+	if gogoproto.HasUnrecognized(file.FileDescriptorProto, message.DescriptorProto) {
+		p.P(`if m.XXX_unrecognized != nil {`)
+		p.In()
+		p.P(`i+=copy(dAtA[i:], m.XXX_unrecognized)`)
+		p.Out()
+		p.P(`}`)
+	}
+
+	p.P(`return i, nil`)
+	p.Out()
+	p.P(`}`)
+	p.P()
+
+	//Generate MarshalTo methods for oneof fields
+	m := proto.Clone(message.DescriptorProto).(*descriptor.DescriptorProto)
+	for _, field := range m.Field {
+		oneof := field.OneofIndex != nil
+		if !oneof {
+			continue
+		}
+		ccTypeName := p.OneOfTypeName(message, field)
+		p.P(`func (m *`, ccTypeName, `) MarshalTo(dAtA []byte) (int, error) {`)
+		p.In()
+		p.P(`i := 0`)
+		vanity.TurnOffNullableForNativeTypes(field)
+		p.generateField(false, numGen, file, message, field, stable)
+		p.P(`return i, nil`)
+		p.Out()
+		p.P(`}`)
+	}
 }
 
 func init() {
