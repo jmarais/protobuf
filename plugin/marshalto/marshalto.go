@@ -297,13 +297,13 @@ func (p *marshalto) mapField(numGen NumGen, field *descriptor.FieldDescriptorPro
 		descriptor.FieldDescriptorProto_TYPE_BYTES:
 		if gogoproto.IsCustomType(field) && kvField.IsBytes() {
 			p.callVarint(varName, `.Size()`)
-			p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+			p.P(`n2`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
 			p.P(`if err != nil {`)
 			p.In()
 			p.P(`return 0, err`)
 			p.Out()
 			p.P(`}`)
-			p.P(`i+=n`, numGen.Current())
+			p.P(`i+=n2`, numGen.Current())
 		} else {
 			p.callVarint(`len(`, varName, `)`)
 			p.P(`i+=copy(dAtA[i:], `, varName, `)`)
@@ -315,23 +315,23 @@ func (p *marshalto) mapField(numGen NumGen, field *descriptor.FieldDescriptorPro
 	case descriptor.FieldDescriptorProto_TYPE_MESSAGE:
 		if gogoproto.IsStdTime(field) {
 			p.callVarint(p.typesPkg.Use(), `.SizeOfStdTime(*`, varName, `)`)
-			p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdTimeMarshalTo(*`, varName, `, dAtA[i:])`)
+			p.P(`n1`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdTimeMarshalTo(*`, varName, `, dAtA[i:])`)
 		} else if gogoproto.IsStdDuration(field) {
 			p.callVarint(p.typesPkg.Use(), `.SizeOfStdDuration(*`, varName, `)`)
-			p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdDurationMarshalTo(*`, varName, `, dAtA[i:])`)
+			p.P(`n1`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdDurationMarshalTo(*`, varName, `, dAtA[i:])`)
 		} else if protoSizer {
 			p.callVarint(varName, `.ProtoSize()`)
-			p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+			p.P(`n1`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
 		} else {
 			p.callVarint(varName, `.Size()`)
-			p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+			p.P(`n1`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
 		}
 		p.P(`if err != nil {`)
 		p.In()
 		p.P(`return 0, err`)
 		p.Out()
 		p.P(`}`)
-		p.P(`i+=n`, numGen.Current())
+		p.P(`i+=n1`, numGen.Current())
 	}
 }
 
@@ -884,11 +884,22 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdDurationMarshalTo(`, varName, `, dAtA[i:])`)
 			} else if protoSizer {
 				p.callVarint(varName, `.ProtoSize()`)
-				p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+				fd, md := descriptor.ForMessage(message)
+				if gogoproto.IsStableMarshaler(fd, md) {
+					p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+				} else {
+					p.P(`n`, numGen.Next(), `, err := `, varName, `.DeterministicMarshalTo(dAtA[i:])`)
+				}
 			} else {
 				p.callVarint(varName, `.Size()`)
-				p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+				fd, md := descriptor.ForMessage(message)
+				if gogoproto.IsStableMarshaler(fd, md) {
+					p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+				} else {
+					p.P(`n`, numGen.Next(), `, err :=`, varName, `.DeterministicMarshalTo(dAtA[i:])`)
+				}
 			}
+
 			p.P(`if err != nil {`)
 			p.In()
 			p.P(`return 0, err`)
@@ -1150,7 +1161,13 @@ func (p *marshalto) generateMarshalTo(file *generator.FileDescriptor, message *g
 				oneofs[fieldname] = struct{}{}
 				p.P(`if m.`, fieldname, ` != nil {`)
 				p.In()
-				p.P(`nn`, numGen.Next(), `, err := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
+				// file *google_protobuf.FileDescriptorProto, message *google_protobuf.DescriptorProto
+				fd, md := descriptor.ForMessage(field)
+				if gogoproto.IsStableMarshaler(fd, md) {
+					p.P(`nn`, numGen.Next(), `, err := m.`, fieldname, `.MarshalTo(dAtA[i:])`)
+				} else {
+					p.P(`nn`, numGen.Next(), `, err := m.`, fieldname, `.DeterministicMarshalTo(dAtA[i:])`)
+				}
 				p.P(`if err != nil {`)
 				p.In()
 				p.P(`return 0, err`)
