@@ -32,7 +32,13 @@ func (m *Dropped) XXX_Unmarshal(b []byte) error {
 }
 func (m *Dropped) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +81,13 @@ func (m *DroppedWithoutGetters) XXX_Unmarshal(b []byte) error {
 }
 func (m *DroppedWithoutGetters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +123,13 @@ func (m *Kept) XXX_Unmarshal(b []byte) error {
 }
 func (m *Kept) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -357,6 +375,25 @@ func (m *Dropped) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Dropped) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypedecl(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if m.Age != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintTypedecl(dAtA, i, uint64(m.Age))
+	}
+	return i, nil
+}
+
 func (m *DroppedWithoutGetters) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -385,6 +422,24 @@ func (m *DroppedWithoutGetters) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *DroppedWithoutGetters) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Height != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintTypedecl(dAtA, i, uint64(m.Height))
+	}
+	if m.Width != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintTypedecl(dAtA, i, uint64(m.Width))
+	}
+	return i, nil
+}
+
 func (m *Kept) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -396,6 +451,25 @@ func (m *Kept) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Kept) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypedecl(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if m.Age != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintTypedecl(dAtA, i, uint64(m.Age))
+	}
+	return i, nil
+}
+
+func (m *Kept) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

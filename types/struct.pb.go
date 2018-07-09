@@ -80,7 +80,13 @@ func (m *Struct) XXX_Unmarshal(b []byte) error {
 }
 func (m *Struct) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +148,13 @@ func (m *Value) XXX_Unmarshal(b []byte) error {
 }
 func (m *Value) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -403,7 +415,13 @@ func (m *ListValue) XXX_Unmarshal(b []byte) error {
 }
 func (m *ListValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -846,6 +864,50 @@ func (m *Struct) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Struct) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Fields) > 0 {
+		keysForFields := make([]string, 0, len(m.Fields))
+		for k := range m.Fields {
+			keysForFields = append(keysForFields, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForFields)
+		for _, k := range keysForFields {
+			dAtA[i] = 0xa
+			i++
+			v := m.Fields[string(k)]
+			msgSize := 0
+			if v != nil {
+				msgSize = v.Size()
+				msgSize += 1 + sovStruct(uint64(msgSize))
+			}
+			mapSize := 1 + len(k) + sovStruct(uint64(len(k))) + msgSize
+			i = encodeVarintStruct(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintStruct(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintStruct(dAtA, i, uint64(v.Size()))
+				n2, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n2
+			}
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *Value) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -862,11 +924,11 @@ func (m *Value) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Kind != nil {
-		nn2, err := m.Kind.MarshalTo(dAtA[i:])
+		nn3, err := m.Kind.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn2
+		i += nn3
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -915,11 +977,11 @@ func (m *Value_StructValue) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintStruct(dAtA, i, uint64(m.StructValue.Size()))
-		n3, err := m.StructValue.MarshalTo(dAtA[i:])
+		n4, err := m.StructValue.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -929,11 +991,92 @@ func (m *Value_ListValue) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintStruct(dAtA, i, uint64(m.ListValue.Size()))
-		n4, err := m.ListValue.MarshalTo(dAtA[i:])
+		n5, err := m.ListValue.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
+	}
+	return i, nil
+}
+func (m *Value) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Kind != nil {
+		nn6, err := m.Kind.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn6
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Value_NullValue) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x8
+	i++
+	i = encodeVarintStruct(dAtA, i, uint64(m.NullValue))
+	return i, nil
+}
+func (m *Value_NumberValue) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x11
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.NumberValue))))
+	i += 8
+	return i, nil
+}
+func (m *Value_StringValue) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x1a
+	i++
+	i = encodeVarintStruct(dAtA, i, uint64(len(m.StringValue)))
+	i += copy(dAtA[i:], m.StringValue)
+	return i, nil
+}
+func (m *Value_BoolValue) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x20
+	i++
+	if m.BoolValue {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i++
+	return i, nil
+}
+func (m *Value_StructValue) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.StructValue != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintStruct(dAtA, i, uint64(m.StructValue.Size()))
+		n7, err := m.StructValue.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
+	}
+	return i, nil
+}
+func (m *Value_ListValue) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.ListValue != nil {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintStruct(dAtA, i, uint64(m.ListValue.Size()))
+		n8, err := m.ListValue.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
 	}
 	return i, nil
 }
@@ -948,6 +1091,29 @@ func (m *ListValue) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *ListValue) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for _, msg := range m.Values {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintStruct(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *ListValue) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

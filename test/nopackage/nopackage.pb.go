@@ -7,6 +7,7 @@ import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
 
+import github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 import encoding_binary "encoding/binary"
 
 import io "io"
@@ -40,7 +41,13 @@ func (m *M) XXX_Unmarshal(b []byte) error {
 }
 func (m *M) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -89,6 +96,39 @@ func (m *M) MarshalTo(dAtA []byte) (int, error) {
 			dAtA[i] = 0xa
 			i++
 			v := m.F[k]
+			mapSize := 1 + len(k) + sovNopackage(uint64(len(k))) + 1 + 8
+			i = encodeVarintNopackage(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintNopackage(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x11
+			i++
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(v))))
+			i += 8
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *M) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.F) > 0 {
+		keysForF := make([]string, 0, len(m.F))
+		for k := range m.F {
+			keysForF = append(keysForF, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForF)
+		for _, k := range keysForF {
+			dAtA[i] = 0xa
+			i++
+			v := m.F[string(k)]
 			mapSize := 1 + len(k) + sovNopackage(uint64(len(k))) + 1 + 8
 			i = encodeVarintNopackage(dAtA, i, uint64(mapSize))
 			dAtA[i] = 0xa

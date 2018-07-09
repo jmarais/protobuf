@@ -47,7 +47,13 @@ func (m *MapStdTypes) XXX_Unmarshal(b []byte) error {
 }
 func (m *MapStdTypes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -174,6 +180,46 @@ func (m *MapStdTypes) MarshalTo(dAtA []byte) (int, error) {
 					return 0, err
 				}
 				i += n1
+			}
+		}
+	}
+	return i, nil
+}
+
+func (m *MapStdTypes) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.NullableDuration) > 0 {
+		keysForNullableDuration := make([]int32, 0, len(m.NullableDuration))
+		for k := range m.NullableDuration {
+			keysForNullableDuration = append(keysForNullableDuration, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForNullableDuration)
+		for _, k := range keysForNullableDuration {
+			dAtA[i] = 0x1a
+			i++
+			v := m.NullableDuration[int32(k)]
+			msgSize := 0
+			if v != nil {
+				msgSize = github_com_gogo_protobuf_types.SizeOfStdDuration(*v)
+				msgSize += 1 + sovIssue261(uint64(msgSize))
+			}
+			mapSize := 1 + sovIssue261(uint64(k)) + msgSize
+			i = encodeVarintIssue261(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintIssue261(dAtA, i, uint64(k))
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintIssue261(dAtA, i, uint64(github_com_gogo_protobuf_types.SizeOfStdDuration(*v)))
+				n2, err := github_com_gogo_protobuf_types.StdDurationMarshalTo(*v, dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n2
 			}
 		}
 	}

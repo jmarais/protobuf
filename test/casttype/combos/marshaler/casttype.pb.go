@@ -65,7 +65,13 @@ func (m *Castaway) XXX_Unmarshal(b []byte) error {
 }
 func (m *Castaway) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +106,13 @@ func (m *Wilson) XXX_Unmarshal(b []byte) error {
 }
 func (m *Wilson) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1174,6 +1186,184 @@ func (m *Castaway) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Castaway) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Int32Ptr != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintCasttype(dAtA, i, uint64(*m.Int32Ptr))
+	}
+	dAtA[i] = 0x10
+	i++
+	i = encodeVarintCasttype(dAtA, i, uint64(m.Int32))
+	if m.MyUint64Ptr != nil {
+		dAtA[i] = 0x18
+		i++
+		i = encodeVarintCasttype(dAtA, i, uint64(*m.MyUint64Ptr))
+	}
+	dAtA[i] = 0x20
+	i++
+	i = encodeVarintCasttype(dAtA, i, uint64(m.MyUint64))
+	if m.MyFloat32Ptr != nil {
+		dAtA[i] = 0x2d
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(*m.MyFloat32Ptr))))
+		i += 4
+	}
+	dAtA[i] = 0x35
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.MyFloat32))))
+	i += 4
+	if m.MyFloat64Ptr != nil {
+		dAtA[i] = 0x39
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.MyFloat64Ptr))))
+		i += 8
+	}
+	dAtA[i] = 0x41
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.MyFloat64))))
+	i += 8
+	if m.MyBytes != nil {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintCasttype(dAtA, i, uint64(len(m.MyBytes)))
+		i += copy(dAtA[i:], m.MyBytes)
+	}
+	if m.NormalBytes != nil {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintCasttype(dAtA, i, uint64(len(m.NormalBytes)))
+		i += copy(dAtA[i:], m.NormalBytes)
+	}
+	if len(m.MyUint64S) > 0 {
+		for _, num := range m.MyUint64S {
+			dAtA[i] = 0x58
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64(num))
+		}
+	}
+	if len(m.MyMap) > 0 {
+		keysForMyMap := make([]string, 0, len(m.MyMap))
+		for k := range m.MyMap {
+			keysForMyMap = append(keysForMyMap, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForMyMap)
+		for _, k := range keysForMyMap {
+			dAtA[i] = 0x62
+			i++
+			v := m.MyMap[string(k)]
+			mapSize := 1 + len(k) + sovCasttype(uint64(len(k))) + 1 + sovCasttype(uint64(v))
+			i = encodeVarintCasttype(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x10
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64(v))
+		}
+	}
+	if len(m.MyCustomMap) > 0 {
+		keysForMyCustomMap := make([]string, 0, len(m.MyCustomMap))
+		for k := range m.MyCustomMap {
+			keysForMyCustomMap = append(keysForMyCustomMap, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForMyCustomMap)
+		for _, k := range keysForMyCustomMap {
+			dAtA[i] = 0x6a
+			i++
+			v := m.MyCustomMap[github_com_gogo_protobuf_test_casttype.MyStringType(k)]
+			mapSize := 1 + len(k) + sovCasttype(uint64(len(k))) + 1 + sovCasttype(uint64(v))
+			i = encodeVarintCasttype(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x10
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64(v))
+		}
+	}
+	if len(m.MyNullableMap) > 0 {
+		keysForMyNullableMap := make([]int32, 0, len(m.MyNullableMap))
+		for k := range m.MyNullableMap {
+			keysForMyNullableMap = append(keysForMyNullableMap, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForMyNullableMap)
+		for _, k := range keysForMyNullableMap {
+			dAtA[i] = 0x72
+			i++
+			v := m.MyNullableMap[github_com_gogo_protobuf_test_casttype.MyInt32Type(k)]
+			msgSize := 0
+			if v != nil {
+				msgSize = v.Size()
+				msgSize += 1 + sovCasttype(uint64(msgSize))
+			}
+			mapSize := 1 + sovCasttype(uint64(k)) + msgSize
+			i = encodeVarintCasttype(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64(k))
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintCasttype(dAtA, i, uint64(v.Size()))
+				n3, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n3
+			}
+		}
+	}
+	if len(m.MyEmbeddedMap) > 0 {
+		keysForMyEmbeddedMap := make([]int32, 0, len(m.MyEmbeddedMap))
+		for k := range m.MyEmbeddedMap {
+			keysForMyEmbeddedMap = append(keysForMyEmbeddedMap, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForMyEmbeddedMap)
+		for _, k := range keysForMyEmbeddedMap {
+			dAtA[i] = 0x7a
+			i++
+			v := m.MyEmbeddedMap[github_com_gogo_protobuf_test_casttype.MyInt32Type(k)]
+			msgSize := 0
+			if (&v) != nil {
+				msgSize = (&v).Size()
+				msgSize += 1 + sovCasttype(uint64(msgSize))
+			}
+			mapSize := 1 + sovCasttype(uint64(k)) + msgSize
+			i = encodeVarintCasttype(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64(k))
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintCasttype(dAtA, i, uint64((&v).Size()))
+			n4, err := (&v).MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n4
+		}
+	}
+	if m.String_ != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintCasttype(dAtA, i, uint64(len(*m.String_)))
+		i += copy(dAtA[i:], *m.String_)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *Wilson) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1185,6 +1375,22 @@ func (m *Wilson) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Wilson) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Int64 != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintCasttype(dAtA, i, uint64(*m.Int64))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Wilson) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

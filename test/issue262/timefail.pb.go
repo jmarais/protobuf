@@ -46,7 +46,13 @@ func (m *TimeFail) XXX_Unmarshal(b []byte) error {
 }
 func (m *TimeFail) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -144,6 +150,24 @@ func (m *TimeFail) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += n1
+	}
+	return i, nil
+}
+
+func (m *TimeFail) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.TimeTest != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTimefail(dAtA, i, uint64(github_com_gogo_protobuf_types.SizeOfStdTime(*m.TimeTest)))
+		n2, err := github_com_gogo_protobuf_types.StdTimeMarshalTo(*m.TimeTest, dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
 	}
 	return i, nil
 }

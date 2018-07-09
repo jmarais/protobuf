@@ -42,7 +42,13 @@ func (m *IndexQuery) XXX_Unmarshal(b []byte) error {
 }
 func (m *IndexQuery) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -130,6 +136,29 @@ func (m *IndexQuery) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *IndexQuery) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Key != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintIndex(dAtA, i, uint64(len(*m.Key)))
+		i += copy(dAtA[i:], *m.Key)
+	}
+	if m.Value != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintIndex(dAtA, i, uint64(len(*m.Value)))
+		i += copy(dAtA[i:], *m.Value)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *IndexQuery) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

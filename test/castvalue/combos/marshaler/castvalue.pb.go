@@ -47,7 +47,13 @@ func (m *Castaway) XXX_Unmarshal(b []byte) error {
 }
 func (m *Castaway) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +88,13 @@ func (m *Wilson) XXX_Unmarshal(b []byte) error {
 }
 func (m *Wilson) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -730,6 +742,79 @@ func (m *Castaway) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Castaway) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.CastMapValueMessage) > 0 {
+		keysForCastMapValueMessage := make([]int32, 0, len(m.CastMapValueMessage))
+		for k := range m.CastMapValueMessage {
+			keysForCastMapValueMessage = append(keysForCastMapValueMessage, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForCastMapValueMessage)
+		for _, k := range keysForCastMapValueMessage {
+			dAtA[i] = 0xa
+			i++
+			v := m.CastMapValueMessage[int32(k)]
+			msgSize := 0
+			if ((*Wilson)(&v)) != nil {
+				msgSize = ((*Wilson)(&v)).Size()
+				msgSize += 1 + sovCastvalue(uint64(msgSize))
+			}
+			mapSize := 1 + sovCastvalue(uint64(k)) + msgSize
+			i = encodeVarintCastvalue(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintCastvalue(dAtA, i, uint64(k))
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintCastvalue(dAtA, i, uint64(((*Wilson)(&v)).Size()))
+			n3, err := ((*Wilson)(&v)).MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n3
+		}
+	}
+	if len(m.CastMapValueMessageNullable) > 0 {
+		keysForCastMapValueMessageNullable := make([]int32, 0, len(m.CastMapValueMessageNullable))
+		for k := range m.CastMapValueMessageNullable {
+			keysForCastMapValueMessageNullable = append(keysForCastMapValueMessageNullable, int32(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Int32s(keysForCastMapValueMessageNullable)
+		for _, k := range keysForCastMapValueMessageNullable {
+			dAtA[i] = 0x12
+			i++
+			v := m.CastMapValueMessageNullable[int32(k)]
+			msgSize := 0
+			if ((*Wilson)(v)) != nil {
+				msgSize = ((*Wilson)(v)).Size()
+				msgSize += 1 + sovCastvalue(uint64(msgSize))
+			}
+			mapSize := 1 + sovCastvalue(uint64(k)) + msgSize
+			i = encodeVarintCastvalue(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0x8
+			i++
+			i = encodeVarintCastvalue(dAtA, i, uint64(k))
+			if ((*Wilson)(v)) != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintCastvalue(dAtA, i, uint64(((*Wilson)(v)).Size()))
+				n4, err := ((*Wilson)(v)).MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n4
+			}
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *Wilson) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -741,6 +826,22 @@ func (m *Wilson) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Wilson) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Int64 != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintCastvalue(dAtA, i, uint64(*m.Int64))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Wilson) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

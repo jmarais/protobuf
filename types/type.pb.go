@@ -201,7 +201,13 @@ func (m *Type) XXX_Unmarshal(b []byte) error {
 }
 func (m *Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -304,7 +310,13 @@ func (m *Field) XXX_Unmarshal(b []byte) error {
 }
 func (m *Field) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -423,7 +435,13 @@ func (m *Enum) XXX_Unmarshal(b []byte) error {
 }
 func (m *Enum) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -503,7 +521,13 @@ func (m *EnumValue) XXX_Unmarshal(b []byte) error {
 }
 func (m *EnumValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -574,7 +598,13 @@ func (m *Option) XXX_Unmarshal(b []byte) error {
 }
 func (m *Option) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1401,6 +1431,77 @@ func (m *Type) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Type) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if len(m.Fields) > 0 {
+		for _, msg := range m.Fields {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Oneofs) > 0 {
+		for _, s := range m.Oneofs {
+			dAtA[i] = 0x1a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.Options) > 0 {
+		for _, msg := range m.Options {
+			dAtA[i] = 0x22
+			i++
+			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.SourceContext != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.SourceContext.Size()))
+		n2, err := m.SourceContext.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if m.Syntax != 0 {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.Syntax))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *Field) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1412,6 +1513,83 @@ func (m *Field) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Field) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Kind != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.Kind))
+	}
+	if m.Cardinality != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.Cardinality))
+	}
+	if m.Number != 0 {
+		dAtA[i] = 0x18
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.Number))
+	}
+	if len(m.Name) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if len(m.TypeUrl) > 0 {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.TypeUrl)))
+		i += copy(dAtA[i:], m.TypeUrl)
+	}
+	if m.OneofIndex != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.OneofIndex))
+	}
+	if m.Packed {
+		dAtA[i] = 0x40
+		i++
+		if m.Packed {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if len(m.Options) > 0 {
+		for _, msg := range m.Options {
+			dAtA[i] = 0x4a
+			i++
+			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.JsonName) > 0 {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.JsonName)))
+		i += copy(dAtA[i:], m.JsonName)
+	}
+	if len(m.DefaultValue) > 0 {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.DefaultValue)))
+		i += copy(dAtA[i:], m.DefaultValue)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Field) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1537,11 +1715,67 @@ func (m *Enum) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintType(dAtA, i, uint64(m.SourceContext.Size()))
-		n2, err := m.SourceContext.MarshalTo(dAtA[i:])
+		n3, err := m.SourceContext.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n3
+	}
+	if m.Syntax != 0 {
+		dAtA[i] = 0x28
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.Syntax))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Enum) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if len(m.Enumvalue) > 0 {
+		for _, msg := range m.Enumvalue {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.Options) > 0 {
+		for _, msg := range m.Options {
+			dAtA[i] = 0x1a
+			i++
+			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.SourceContext != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.SourceContext.Size()))
+		n4, err := m.SourceContext.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
 	}
 	if m.Syntax != 0 {
 		dAtA[i] = 0x28
@@ -1565,6 +1799,40 @@ func (m *EnumValue) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *EnumValue) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if m.Number != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.Number))
+	}
+	if len(m.Options) > 0 {
+		for _, msg := range m.Options {
+			dAtA[i] = 0x1a
+			i++
+			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *EnumValue) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1623,11 +1891,38 @@ func (m *Option) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintType(dAtA, i, uint64(m.Value.Size()))
-		n3, err := m.Value.MarshalTo(dAtA[i:])
+		n5, err := m.Value.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n5
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Option) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if m.Value != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintType(dAtA, i, uint64(m.Value.Size()))
+		n6, err := m.Value.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)

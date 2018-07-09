@@ -43,7 +43,13 @@ func (m *Nil) XXX_Unmarshal(b []byte) error {
 }
 func (m *Nil) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +97,13 @@ func (m *NinRepPackedNative) XXX_Unmarshal(b []byte) error {
 }
 func (m *NinRepPackedNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -232,7 +244,13 @@ func (m *NinOptNative) XXX_Unmarshal(b []byte) error {
 }
 func (m *NinOptNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -382,7 +400,13 @@ func (m *NinOptStruct) XXX_Unmarshal(b []byte) error {
 }
 func (m *NinOptStruct) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -667,6 +691,17 @@ func (m *Nil) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Nil) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *NinRepPackedNative) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -863,6 +898,192 @@ func (m *NinRepPackedNative) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *NinRepPackedNative) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Field1) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field1)*8))
+		for _, num := range m.Field1 {
+			f17 := math.Float64bits(float64(num))
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f17))
+			i += 8
+		}
+	}
+	if len(m.Field2) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field2)*4))
+		for _, num := range m.Field2 {
+			f18 := math.Float32bits(float32(num))
+			encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(f18))
+			i += 4
+		}
+	}
+	if len(m.Field3) > 0 {
+		dAtA20 := make([]byte, len(m.Field3)*10)
+		var j19 int
+		for _, num1 := range m.Field3 {
+			num := uint64(num1)
+			for num >= 1<<7 {
+				dAtA20[j19] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j19++
+			}
+			dAtA20[j19] = uint8(num)
+			j19++
+		}
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(j19))
+		i += copy(dAtA[i:], dAtA20[:j19])
+	}
+	if len(m.Field4) > 0 {
+		dAtA22 := make([]byte, len(m.Field4)*10)
+		var j21 int
+		for _, num1 := range m.Field4 {
+			num := uint64(num1)
+			for num >= 1<<7 {
+				dAtA22[j21] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j21++
+			}
+			dAtA22[j21] = uint8(num)
+			j21++
+		}
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(j21))
+		i += copy(dAtA[i:], dAtA22[:j21])
+	}
+	if len(m.Field5) > 0 {
+		dAtA24 := make([]byte, len(m.Field5)*10)
+		var j23 int
+		for _, num := range m.Field5 {
+			for num >= 1<<7 {
+				dAtA24[j23] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j23++
+			}
+			dAtA24[j23] = uint8(num)
+			j23++
+		}
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(j23))
+		i += copy(dAtA[i:], dAtA24[:j23])
+	}
+	if len(m.Field6) > 0 {
+		dAtA26 := make([]byte, len(m.Field6)*10)
+		var j25 int
+		for _, num := range m.Field6 {
+			for num >= 1<<7 {
+				dAtA26[j25] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j25++
+			}
+			dAtA26[j25] = uint8(num)
+			j25++
+		}
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(j25))
+		i += copy(dAtA[i:], dAtA26[:j25])
+	}
+	if len(m.Field7) > 0 {
+		dAtA27 := make([]byte, len(m.Field7)*5)
+		var j28 int
+		for _, num := range m.Field7 {
+			x29 := (uint32(num) << 1) ^ uint32((num >> 31))
+			for x29 >= 1<<7 {
+				dAtA27[j28] = uint8(uint64(x29)&0x7f | 0x80)
+				j28++
+				x29 >>= 7
+			}
+			dAtA27[j28] = uint8(x29)
+			j28++
+		}
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(j28))
+		i += copy(dAtA[i:], dAtA27[:j28])
+	}
+	if len(m.Field8) > 0 {
+		var j30 int
+		dAtA32 := make([]byte, len(m.Field8)*10)
+		for _, num := range m.Field8 {
+			x31 := (uint64(num) << 1) ^ uint64((num >> 63))
+			for x31 >= 1<<7 {
+				dAtA32[j30] = uint8(uint64(x31)&0x7f | 0x80)
+				j30++
+				x31 >>= 7
+			}
+			dAtA32[j30] = uint8(x31)
+			j30++
+		}
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(j30))
+		i += copy(dAtA[i:], dAtA32[:j30])
+	}
+	if len(m.Field9) > 0 {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field9)*4))
+		for _, num := range m.Field9 {
+			encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(num))
+			i += 4
+		}
+	}
+	if len(m.Field10) > 0 {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field10)*4))
+		for _, num := range m.Field10 {
+			encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(num))
+			i += 4
+		}
+	}
+	if len(m.Field11) > 0 {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field11)*8))
+		for _, num := range m.Field11 {
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(num))
+			i += 8
+		}
+	}
+	if len(m.Field12) > 0 {
+		dAtA[i] = 0x62
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field12)*8))
+		for _, num := range m.Field12 {
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(num))
+			i += 8
+		}
+	}
+	if len(m.Field13) > 0 {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field13)))
+		for _, b := range m.Field13 {
+			if b {
+				dAtA[i] = 1
+			} else {
+				dAtA[i] = 0
+			}
+			i++
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *NinOptNative) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -874,6 +1095,105 @@ func (m *NinOptNative) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NinOptNative) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Field1 != nil {
+		dAtA[i] = 0x9
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field1))))
+		i += 8
+	}
+	if m.Field2 != nil {
+		dAtA[i] = 0x15
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(*m.Field2))))
+		i += 4
+	}
+	if m.Field3 != nil {
+		dAtA[i] = 0x18
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(*m.Field3))
+	}
+	if m.Field4 != nil {
+		dAtA[i] = 0x20
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(*m.Field4))
+	}
+	if m.Field5 != nil {
+		dAtA[i] = 0x28
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(*m.Field5))
+	}
+	if m.Field6 != nil {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(*m.Field6))
+	}
+	if m.Field7 != nil {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64((uint32(*m.Field7)<<1)^uint32((*m.Field7>>31))))
+	}
+	if m.Field8 != nil {
+		dAtA[i] = 0x40
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64((uint64(*m.Field8)<<1)^uint64((*m.Field8>>63))))
+	}
+	if m.Field9 != nil {
+		dAtA[i] = 0x4d
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(*m.Field9))
+		i += 4
+	}
+	if m.Field10 != nil {
+		dAtA[i] = 0x55
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(*m.Field10))
+		i += 4
+	}
+	if m.Field11 != nil {
+		dAtA[i] = 0x59
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.Field11))
+		i += 8
+	}
+	if m.Field12 != nil {
+		dAtA[i] = 0x61
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.Field12))
+		i += 8
+	}
+	if m.Field13 != nil {
+		dAtA[i] = 0x68
+		i++
+		if *m.Field13 {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.Field14 != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(*m.Field14)))
+		i += copy(dAtA[i:], *m.Field14)
+	}
+	if m.Field15 != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field15)))
+		i += copy(dAtA[i:], m.Field15)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *NinOptNative) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1003,21 +1323,21 @@ func (m *NinOptStruct) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintFuzz(dAtA, i, uint64(m.Field3.Size()))
-		n17, err := m.Field3.MarshalTo(dAtA[i:])
+		n33, err := m.Field3.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n17
+		i += n33
 	}
 	if m.Field4 != nil {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintFuzz(dAtA, i, uint64(m.Field4.Size()))
-		n18, err := m.Field4.MarshalTo(dAtA[i:])
+		n34, err := m.Field4.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n18
+		i += n34
 	}
 	if m.Field6 != nil {
 		dAtA[i] = 0x30
@@ -1033,11 +1353,96 @@ func (m *NinOptStruct) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintFuzz(dAtA, i, uint64(m.Field8.Size()))
-		n19, err := m.Field8.MarshalTo(dAtA[i:])
+		n35, err := m.Field8.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n19
+		i += n35
+	}
+	if m.Field13 != nil {
+		dAtA[i] = 0x68
+		i++
+		if *m.Field13 {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.Field14 != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(*m.Field14)))
+		i += copy(dAtA[i:], *m.Field14)
+	}
+	if m.Field15 != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(len(m.Field15)))
+		i += copy(dAtA[i:], m.Field15)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *NinOptStruct) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Field1 != nil {
+		dAtA[i] = 0x9
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field1))))
+		i += 8
+	}
+	if m.Field2 != nil {
+		dAtA[i] = 0x15
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(*m.Field2))))
+		i += 4
+	}
+	if m.Field3 != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(m.Field3.Size()))
+		n36, err := m.Field3.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n36
+	}
+	if m.Field4 != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(m.Field4.Size()))
+		n37, err := m.Field4.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n37
+	}
+	if m.Field6 != nil {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(*m.Field6))
+	}
+	if m.Field7 != nil {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64((uint32(*m.Field7)<<1)^uint32((*m.Field7>>31))))
+	}
+	if m.Field8 != nil {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintFuzz(dAtA, i, uint64(m.Field8.Size()))
+		n38, err := m.Field8.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n38
 	}
 	if m.Field13 != nil {
 		dAtA[i] = 0x68

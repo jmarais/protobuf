@@ -44,7 +44,13 @@ func (m *RequiredExample) XXX_Unmarshal(b []byte) error {
 }
 func (m *RequiredExample) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +121,13 @@ func (m *NidOptNative) XXX_Unmarshal(b []byte) error {
 }
 func (m *NidOptNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -270,7 +282,13 @@ func (m *NinOptNative) XXX_Unmarshal(b []byte) error {
 }
 func (m *NinOptNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -411,7 +429,13 @@ func (m *NestedNinOptNative) XXX_Unmarshal(b []byte) error {
 }
 func (m *NestedNinOptNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -492,6 +516,46 @@ func (m *RequiredExample) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *RequiredExample) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.TheRequiredString == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("theRequiredString")
+	} else {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(len(*m.TheRequiredString)))
+		i += copy(dAtA[i:], *m.TheRequiredString)
+	}
+	if m.TheOptionalString != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(len(*m.TheOptionalString)))
+		i += copy(dAtA[i:], *m.TheOptionalString)
+	}
+	if len(m.TheRepeatedStrings) > 0 {
+		for _, s := range m.TheRepeatedStrings {
+			dAtA[i] = 0x1a
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *NidOptNative) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -503,6 +567,77 @@ func (m *NidOptNative) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NidOptNative) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	dAtA[i] = 0x9
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Field1))))
+	i += 8
+	dAtA[i] = 0x15
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Field2))))
+	i += 4
+	dAtA[i] = 0x18
+	i++
+	i = encodeVarintRequiredexample(dAtA, i, uint64(m.Field3))
+	dAtA[i] = 0x20
+	i++
+	i = encodeVarintRequiredexample(dAtA, i, uint64(m.Field4))
+	dAtA[i] = 0x28
+	i++
+	i = encodeVarintRequiredexample(dAtA, i, uint64(m.Field5))
+	dAtA[i] = 0x30
+	i++
+	i = encodeVarintRequiredexample(dAtA, i, uint64(m.Field6))
+	dAtA[i] = 0x38
+	i++
+	i = encodeVarintRequiredexample(dAtA, i, uint64((uint32(m.Field7)<<1)^uint32((m.Field7>>31))))
+	dAtA[i] = 0x40
+	i++
+	i = encodeVarintRequiredexample(dAtA, i, uint64((uint64(m.Field8)<<1)^uint64((m.Field8>>63))))
+	dAtA[i] = 0x4d
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(m.Field9))
+	i += 4
+	dAtA[i] = 0x55
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(m.Field10))
+	i += 4
+	dAtA[i] = 0x59
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(m.Field11))
+	i += 8
+	dAtA[i] = 0x61
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(m.Field12))
+	i += 8
+	dAtA[i] = 0x68
+	i++
+	if m.Field13 {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i++
+	dAtA[i] = 0x72
+	i++
+	i = encodeVarintRequiredexample(dAtA, i, uint64(len(m.Field14)))
+	i += copy(dAtA[i:], m.Field14)
+	if m.Field15 != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(len(m.Field15)))
+		i += copy(dAtA[i:], m.Field15)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *NidOptNative) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -712,6 +847,135 @@ func (m *NinOptNative) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *NinOptNative) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Field1 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field1")
+	} else {
+		dAtA[i] = 0x9
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field1))))
+		i += 8
+	}
+	if m.Field2 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field2")
+	} else {
+		dAtA[i] = 0x15
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(*m.Field2))))
+		i += 4
+	}
+	if m.Field3 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field3")
+	} else {
+		dAtA[i] = 0x18
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(*m.Field3))
+	}
+	if m.Field4 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field4")
+	} else {
+		dAtA[i] = 0x20
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(*m.Field4))
+	}
+	if m.Field5 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field5")
+	} else {
+		dAtA[i] = 0x28
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(*m.Field5))
+	}
+	if m.Field6 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field6")
+	} else {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(*m.Field6))
+	}
+	if m.Field7 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field7")
+	} else {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64((uint32(*m.Field7)<<1)^uint32((*m.Field7>>31))))
+	}
+	if m.Field8 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field8")
+	} else {
+		dAtA[i] = 0x40
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64((uint64(*m.Field8)<<1)^uint64((*m.Field8>>63))))
+	}
+	if m.Field9 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field9")
+	} else {
+		dAtA[i] = 0x4d
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(*m.Field9))
+		i += 4
+	}
+	if m.Field10 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field10")
+	} else {
+		dAtA[i] = 0x55
+		i++
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(*m.Field10))
+		i += 4
+	}
+	if m.Field11 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field11")
+	} else {
+		dAtA[i] = 0x59
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.Field11))
+		i += 8
+	}
+	if m.Field12 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field12")
+	} else {
+		dAtA[i] = 0x61
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.Field12))
+		i += 8
+	}
+	if m.Field13 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field13")
+	} else {
+		dAtA[i] = 0x68
+		i++
+		if *m.Field13 {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.Field14 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field14")
+	} else {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(len(*m.Field14)))
+		i += copy(dAtA[i:], *m.Field14)
+	}
+	if m.Field15 == nil {
+		return 0, github_com_gogo_protobuf_proto.NewRequiredNotSetError("Field15")
+	} else {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintRequiredexample(dAtA, i, uint64(len(m.Field15)))
+		i += copy(dAtA[i:], m.Field15)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *NestedNinOptNative) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -723,6 +987,29 @@ func (m *NestedNinOptNative) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NestedNinOptNative) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.NestedNinOpts) > 0 {
+		for _, msg := range m.NestedNinOpts {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintRequiredexample(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *NestedNinOptNative) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

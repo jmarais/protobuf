@@ -52,7 +52,13 @@ func (m *Subby) XXX_Unmarshal(b []byte) error {
 }
 func (m *Subby) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +110,13 @@ func (m *AllTypesOneOf) XXX_Unmarshal(b []byte) error {
 }
 func (m *AllTypesOneOf) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -612,7 +624,13 @@ func (m *TwoOneofs) XXX_Unmarshal(b []byte) error {
 }
 func (m *TwoOneofs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -887,7 +905,13 @@ func (m *CustomOneof) XXX_Unmarshal(b []byte) error {
 }
 func (m *CustomOneof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -3378,6 +3402,23 @@ func (m *Subby) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *Subby) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Sub != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintOne(dAtA, i, uint64(len(*m.Sub)))
+		i += copy(dAtA[i:], *m.Sub)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *AllTypesOneOf) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3542,6 +3583,160 @@ func (m *AllTypesOneOf_SubMessage) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
+func (m *AllTypesOneOf) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.TestOneof != nil {
+		nn3, err := m.TestOneof.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn3
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *AllTypesOneOf_Field1) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x9
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Field1))))
+	i += 8
+	return i, nil
+}
+func (m *AllTypesOneOf_Field2) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x15
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Field2))))
+	i += 4
+	return i, nil
+}
+func (m *AllTypesOneOf_Field3) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x18
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.Field3))
+	return i, nil
+}
+func (m *AllTypesOneOf_Field4) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x20
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.Field4))
+	return i, nil
+}
+func (m *AllTypesOneOf_Field5) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x28
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.Field5))
+	return i, nil
+}
+func (m *AllTypesOneOf_Field6) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x30
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.Field6))
+	return i, nil
+}
+func (m *AllTypesOneOf_Field7) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x38
+	i++
+	i = encodeVarintOne(dAtA, i, uint64((uint32(m.Field7)<<1)^uint32((m.Field7>>31))))
+	return i, nil
+}
+func (m *AllTypesOneOf_Field8) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x40
+	i++
+	i = encodeVarintOne(dAtA, i, uint64((uint64(m.Field8)<<1)^uint64((m.Field8>>63))))
+	return i, nil
+}
+func (m *AllTypesOneOf_Field9) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x4d
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(m.Field9))
+	i += 4
+	return i, nil
+}
+func (m *AllTypesOneOf_Field10) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x55
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(m.Field10))
+	i += 4
+	return i, nil
+}
+func (m *AllTypesOneOf_Field11) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x59
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(m.Field11))
+	i += 8
+	return i, nil
+}
+func (m *AllTypesOneOf_Field12) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x61
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(m.Field12))
+	i += 8
+	return i, nil
+}
+func (m *AllTypesOneOf_Field13) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x68
+	i++
+	if m.Field13 {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i++
+	return i, nil
+}
+func (m *AllTypesOneOf_Field14) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x72
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(len(m.Field14)))
+	i += copy(dAtA[i:], m.Field14)
+	return i, nil
+}
+func (m *AllTypesOneOf_Field15) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Field15 != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintOne(dAtA, i, uint64(len(m.Field15)))
+		i += copy(dAtA[i:], m.Field15)
+	}
+	return i, nil
+}
+func (m *AllTypesOneOf_SubMessage) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.SubMessage != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintOne(dAtA, i, uint64(m.SubMessage.Size()))
+		n4, err := m.SubMessage.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	return i, nil
+}
 func (m *TwoOneofs) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3558,18 +3753,18 @@ func (m *TwoOneofs) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.One != nil {
-		nn3, err := m.One.MarshalTo(dAtA[i:])
+		nn5, err := m.One.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn3
+		i += nn5
 	}
 	if m.Two != nil {
-		nn4, err := m.Two.MarshalTo(dAtA[i:])
+		nn6, err := m.Two.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn4
+		i += nn6
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -3630,11 +3825,97 @@ func (m *TwoOneofs_SubMessage2) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i++
 		i = encodeVarintOne(dAtA, i, uint64(m.SubMessage2.Size()))
-		n5, err := m.SubMessage2.MarshalTo(dAtA[i:])
+		n7, err := m.SubMessage2.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n7
+	}
+	return i, nil
+}
+func (m *TwoOneofs) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.One != nil {
+		nn8, err := m.One.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn8
+	}
+	if m.Two != nil {
+		nn9, err := m.Two.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn9
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *TwoOneofs_Field1) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x9
+	i++
+	encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Field1))))
+	i += 8
+	return i, nil
+}
+func (m *TwoOneofs_Field2) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x15
+	i++
+	encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Field2))))
+	i += 4
+	return i, nil
+}
+func (m *TwoOneofs_Field3) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x18
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.Field3))
+	return i, nil
+}
+func (m *TwoOneofs_Field34) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x92
+	i++
+	dAtA[i] = 0x2
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(len(m.Field34)))
+	i += copy(dAtA[i:], m.Field34)
+	return i, nil
+}
+func (m *TwoOneofs_Field35) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Field35 != nil {
+		dAtA[i] = 0x9a
+		i++
+		dAtA[i] = 0x2
+		i++
+		i = encodeVarintOne(dAtA, i, uint64(len(m.Field35)))
+		i += copy(dAtA[i:], m.Field35)
+	}
+	return i, nil
+}
+func (m *TwoOneofs_SubMessage2) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.SubMessage2 != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x2
+		i++
+		i = encodeVarintOne(dAtA, i, uint64(m.SubMessage2.Size()))
+		n10, err := m.SubMessage2.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n10
 	}
 	return i, nil
 }
@@ -3654,11 +3935,11 @@ func (m *CustomOneof) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Custom != nil {
-		nn6, err := m.Custom.MarshalTo(dAtA[i:])
+		nn11, err := m.Custom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn6
+		i += nn11
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -3683,11 +3964,71 @@ func (m *CustomOneof_CustomType) MarshalTo(dAtA []byte) (int, error) {
 	dAtA[i] = 0x2
 	i++
 	i = encodeVarintOne(dAtA, i, uint64(m.CustomType.Size()))
-	n7, err := m.CustomType.MarshalTo(dAtA[i:])
+	n12, err := m.CustomType.MarshalTo(dAtA[i:])
 	if err != nil {
 		return 0, err
 	}
-	i += n7
+	i += n12
+	return i, nil
+}
+func (m *CustomOneof_CastType) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0xa0
+	i++
+	dAtA[i] = 0x2
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.CastType))
+	return i, nil
+}
+func (m *CustomOneof_MyCustomName) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0xa8
+	i++
+	dAtA[i] = 0x2
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.MyCustomName))
+	return i, nil
+}
+func (m *CustomOneof) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Custom != nil {
+		nn13, err := m.Custom.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn13
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *CustomOneof_Stringy) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x92
+	i++
+	dAtA[i] = 0x2
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(len(m.Stringy)))
+	i += copy(dAtA[i:], m.Stringy)
+	return i, nil
+}
+func (m *CustomOneof_CustomType) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x9a
+	i++
+	dAtA[i] = 0x2
+	i++
+	i = encodeVarintOne(dAtA, i, uint64(m.CustomType.Size()))
+	n14, err := m.CustomType.MarshalTo(dAtA[i:])
+	if err != nil {
+		return 0, err
+	}
+	i += n14
 	return i, nil
 }
 func (m *CustomOneof_CastType) MarshalTo(dAtA []byte) (int, error) {

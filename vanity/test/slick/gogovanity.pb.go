@@ -42,7 +42,13 @@ func (m *B) XXX_Unmarshal(b []byte) error {
 }
 func (m *B) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -163,6 +169,28 @@ func (m *B) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *B) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.String_ != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintGogovanity(dAtA, i, uint64(len(*m.String_)))
+		i += copy(dAtA[i:], *m.String_)
+	}
+	dAtA[i] = 0x10
+	i++
+	i = encodeVarintGogovanity(dAtA, i, uint64(m.Int64))
+	if m.Int32 != nil {
+		dAtA[i] = 0x18
+		i++
+		i = encodeVarintGogovanity(dAtA, i, uint64(*m.Int32))
+	}
+	return i, nil
+}
+
+func (m *B) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

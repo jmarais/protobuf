@@ -44,7 +44,13 @@ func (m *C) XXX_Unmarshal(b []byte) error {
 }
 func (m *C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -120,6 +126,27 @@ func (m *C) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += n1
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *C) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.F2 != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintC(dAtA, i, uint64(m.F2.Size()))
+		n2, err := m.F2.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)

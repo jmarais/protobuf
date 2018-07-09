@@ -43,7 +43,13 @@ func (m *SizeMessage) XXX_Unmarshal(b []byte) error {
 }
 func (m *SizeMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -147,6 +153,38 @@ func (m *SizeMessage) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *SizeMessage) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Size_ != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintSizeunderscore(dAtA, i, uint64(*m.Size_))
+	}
+	if m.Equal_ != nil {
+		dAtA[i] = 0x10
+		i++
+		if *m.Equal_ {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.String_ != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintSizeunderscore(dAtA, i, uint64(len(*m.String_)))
+		i += copy(dAtA[i:], *m.String_)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *SizeMessage) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

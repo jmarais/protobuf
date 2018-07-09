@@ -131,7 +131,13 @@ func (m *Timestamp) XXX_Unmarshal(b []byte) error {
 }
 func (m *Timestamp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -274,6 +280,27 @@ func (m *Timestamp) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Timestamp) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Seconds != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintTimestamp(dAtA, i, uint64(m.Seconds))
+	}
+	if m.Nanos != 0 {
+		dAtA[i] = 0x10
+		i++
+		i = encodeVarintTimestamp(dAtA, i, uint64(m.Nanos))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *Timestamp) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

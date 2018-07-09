@@ -51,7 +51,13 @@ func (m *NewNoGroup) XXX_Unmarshal(b []byte) error {
 }
 func (m *NewNoGroup) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +92,13 @@ func (m *A) XXX_Unmarshal(b []byte) error {
 }
 func (m *A) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1097,6 +1109,41 @@ func (m *NewNoGroup) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *NewNoGroup) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Field1 != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(*m.Field1))
+	}
+	if len(m.Field3) > 0 {
+		for _, num := range m.Field3 {
+			dAtA[i] = 0x19
+			i++
+			f3 := math.Float64bits(float64(num))
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f3))
+			i += 8
+		}
+	}
+	if m.A != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(m.A.Size()))
+		n4, err := m.A.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *A) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1108,6 +1155,22 @@ func (m *A) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *A) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AField != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(*m.AField))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *A) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

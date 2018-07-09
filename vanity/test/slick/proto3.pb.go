@@ -39,7 +39,13 @@ func (m *Aproto3) XXX_Unmarshal(b []byte) error {
 }
 func (m *Aproto3) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -120,6 +126,20 @@ func (m *Aproto3) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Aproto3) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.B) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintProto3(dAtA, i, uint64(len(m.B)))
+		i += copy(dAtA[i:], m.B)
+	}
+	return i, nil
+}
+
+func (m *Aproto3) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

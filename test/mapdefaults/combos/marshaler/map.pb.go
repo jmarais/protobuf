@@ -46,7 +46,13 @@ func (m *MapTest) XXX_Unmarshal(b []byte) error {
 }
 func (m *MapTest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +87,13 @@ func (m *FakeMap) XXX_Unmarshal(b []byte) error {
 }
 func (m *FakeMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +130,13 @@ func (m *FakeMapEntry) XXX_Unmarshal(b []byte) error {
 }
 func (m *FakeMapEntry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -727,6 +745,39 @@ func (m *MapTest) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *MapTest) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.StrStr) > 0 {
+		keysForStrStr := make([]string, 0, len(m.StrStr))
+		for k := range m.StrStr {
+			keysForStrStr = append(keysForStrStr, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForStrStr)
+		for _, k := range keysForStrStr {
+			dAtA[i] = 0xa
+			i++
+			v := m.StrStr[string(k)]
+			mapSize := 1 + len(k) + sovMap(uint64(len(k))) + 1 + len(v) + sovMap(uint64(len(v)))
+			i = encodeVarintMap(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintMap(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintMap(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *FakeMap) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -760,6 +811,29 @@ func (m *FakeMap) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *FakeMap) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Entries) > 0 {
+		for _, msg := range m.Entries {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintMap(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *FakeMapEntry) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -771,6 +845,35 @@ func (m *FakeMapEntry) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *FakeMapEntry) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Key) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintMap(dAtA, i, uint64(len(m.Key)))
+		i += copy(dAtA[i:], m.Key)
+	}
+	if len(m.Value) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintMap(dAtA, i, uint64(len(m.Value)))
+		i += copy(dAtA[i:], m.Value)
+	}
+	if len(m.Other) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintMap(dAtA, i, uint64(len(m.Other)))
+		i += copy(dAtA[i:], m.Other)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *FakeMapEntry) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int

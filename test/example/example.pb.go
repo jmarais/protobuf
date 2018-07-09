@@ -52,7 +52,13 @@ func (m *A) XXX_Unmarshal(b []byte) error {
 }
 func (m *A) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +94,13 @@ func (m *B) XXX_Unmarshal(b []byte) error {
 }
 func (m *B) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +135,13 @@ func (m *C) XXX_Unmarshal(b []byte) error {
 }
 func (m *C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +184,13 @@ func (m *U) XXX_Unmarshal(b []byte) error {
 }
 func (m *U) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -229,7 +253,13 @@ func (m *E) XXX_Unmarshal(b []byte) error {
 }
 func (m *E) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -263,7 +293,13 @@ func (m *R) XXX_Unmarshal(b []byte) error {
 }
 func (m *R) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -305,7 +341,13 @@ func (m *CastType) XXX_Unmarshal(b []byte) error {
 }
 func (m *CastType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	var n int
+	var err error
+	if deterministic {
+		n, err = m.DeterministicMarshalTo(b)
+	} else {
+		n, err = m.MarshalTo(b)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -1281,6 +1323,32 @@ func (m *A) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *A) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	dAtA[i] = 0xa
+	i++
+	i = encodeVarintExample(dAtA, i, uint64(len(m.Description)))
+	i += copy(dAtA[i:], m.Description)
+	dAtA[i] = 0x10
+	i++
+	i = encodeVarintExample(dAtA, i, uint64(m.Number))
+	dAtA[i] = 0x1a
+	i++
+	i = encodeVarintExample(dAtA, i, uint64(m.Id.Size()))
+	n2, err := m.Id.MarshalTo(dAtA[i:])
+	if err != nil {
+		return 0, err
+	}
+	i += n2
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *B) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1299,11 +1367,42 @@ func (m *B) MarshalTo(dAtA []byte) (int, error) {
 	dAtA[i] = 0xa
 	i++
 	i = encodeVarintExample(dAtA, i, uint64(m.A.Size()))
-	n2, err := m.A.MarshalTo(dAtA[i:])
+	n3, err := m.A.MarshalTo(dAtA[i:])
 	if err != nil {
 		return 0, err
 	}
-	i += n2
+	i += n3
+	if len(m.G) > 0 {
+		for _, msg := range m.G {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintExample(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *B) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	dAtA[i] = 0xa
+	i++
+	i = encodeVarintExample(dAtA, i, uint64(m.A.Size()))
+	n4, err := m.A.MarshalTo(dAtA[i:])
+	if err != nil {
+		return 0, err
+	}
+	i += n4
 	if len(m.G) > 0 {
 		for _, msg := range m.G {
 			dAtA[i] = 0x12
@@ -1348,6 +1447,22 @@ func (m *C) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *C) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.MySize != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintExample(dAtA, i, uint64(*m.MySize))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
 func (m *U) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1367,21 +1482,52 @@ func (m *U) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintExample(dAtA, i, uint64(m.A.Size()))
-		n3, err := m.A.MarshalTo(dAtA[i:])
+		n5, err := m.A.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n5
 	}
 	if m.B != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintExample(dAtA, i, uint64(m.B.Size()))
-		n4, err := m.B.MarshalTo(dAtA[i:])
+		n6, err := m.B.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n6
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *U) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.A != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintExample(dAtA, i, uint64(m.A.Size()))
+		n7, err := m.A.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
+	}
+	if m.B != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintExample(dAtA, i, uint64(m.B.Size()))
+		n8, err := m.B.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
 	}
 	if m.XXX_unrecognized != nil {
 		i += copy(dAtA[i:], m.XXX_unrecognized)
@@ -1400,6 +1546,20 @@ func (m *E) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *E) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_extensions != nil {
+		i += copy(dAtA[i:], m.XXX_extensions)
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *E) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1436,6 +1596,19 @@ func (m *R) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *R) DeterministicMarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Recognized != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintExample(dAtA, i, uint64(*m.Recognized))
+	}
+	return i, nil
+}
+
 func (m *CastType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1447,6 +1620,22 @@ func (m *CastType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CastType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Int32 != nil {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintExample(dAtA, i, uint64(*m.Int32))
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
+}
+
+func (m *CastType) DeterministicMarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
