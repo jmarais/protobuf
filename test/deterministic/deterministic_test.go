@@ -54,7 +54,7 @@ func getTestMap() map[string]string {
 
 }
 
-func _TestOrderedMap(t *testing.T) {
+func TestOrderedMap(t *testing.T) {
 	var b proto.Buffer
 	m := getTestMap()
 	in := &OrderedMap{
@@ -86,7 +86,6 @@ func TestUnorderedMap(t *testing.T) {
 	in := &UnorderedMap{
 		StringMap: m,
 	}
-
 	var b1 proto.Buffer
 	b1.SetDeterministic(true)
 	if err := b1.Marshal(in); err != nil {
@@ -115,7 +114,7 @@ func TestUnorderedMap(t *testing.T) {
 	}
 }
 
-func _TestMapNoMarshaler(t *testing.T) {
+func TestMapNoMarshaler(t *testing.T) {
 	m := getTestMap()
 	in := &MapNoMarshaler{
 		StringMap: m,
@@ -129,6 +128,130 @@ func _TestMapNoMarshaler(t *testing.T) {
 	data1 := b1.Bytes()
 
 	out := &MapNoMarshaler{}
+	err := proto.Unmarshal(data1, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := in.VerboseEqual(out); err != nil {
+		t.Fatal(err)
+	}
+
+	var b2 proto.Buffer
+	b2.SetDeterministic(true)
+	if err := b2.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data2 := b2.Bytes()
+
+	if bytes.Compare(data1, data2) != 0 {
+		t.Fatal("byte arrays are not the same:\n", data1, "\n", data2)
+	}
+}
+
+func TestOrderedNestedMap(t *testing.T) {
+	var b proto.Buffer
+	in := &NestedOrderedMap{
+		StringMap: getTestMap(),
+		NestedMap: &NestedMap1{
+			NestedStringMap: getTestMap(),
+		},
+	}
+	if err := b.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data1 := b.Bytes()
+	out := &NestedOrderedMap{}
+	err := proto.Unmarshal(data1, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := in.VerboseEqual(out); err != nil {
+		t.Fatal(err)
+	}
+	data2, err := proto.Marshal(in)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Compare(data1, data2) != 0 {
+		t.Fatal("byte arrays are not the same\n", data1, "\n", data2)
+	}
+}
+
+func TestUnorderedNestedMap(t *testing.T) {
+	in := &NestedUnorderedMap{
+		StringMap: getTestMap(),
+		NestedMap: &NestedMap2{
+			NestedStringMap: getTestMap(),
+		},
+	}
+	var b1 proto.Buffer
+	b1.SetDeterministic(true)
+	if err := b1.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data1 := b1.Bytes()
+
+	out := &NestedUnorderedMap{}
+	err := proto.Unmarshal(data1, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := in.VerboseEqual(out); err != nil {
+		t.Fatal(err)
+	}
+
+	var b2 proto.Buffer
+	b2.SetDeterministic(true)
+	if err := b2.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data2 := b2.Bytes()
+
+	if bytes.Compare(data1, data2) != 0 {
+		t.Fatal("byte arrays are not the same:\n", data1, "\n", data2)
+	}
+}
+
+func TestOrderedNestedStructMap(t *testing.T) {
+	var b proto.Buffer
+	m := getTestMap()
+	in := &NestedMap1{
+		NestedStringMap: m,
+	}
+	if err := b.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data1 := b.Bytes()
+	out := &NestedMap1{}
+	err := proto.Unmarshal(data1, out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := in.VerboseEqual(out); err != nil {
+		t.Fatal(err)
+	}
+	data2, err := proto.Marshal(in)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bytes.Compare(data1, data2) != 0 {
+		t.Fatal("byte arrays are not the same\n", data1, "\n", data2)
+	}
+}
+
+func TestUnorderedNestedStructMap(t *testing.T) {
+	m := getTestMap()
+	in := &NestedMap2{
+		NestedStringMap: m,
+	}
+	var b1 proto.Buffer
+	b1.SetDeterministic(true)
+	if err := b1.Marshal(in); err != nil {
+		t.Fatalf("Marshal failed: %v", err)
+	}
+	data1 := b1.Bytes()
+
+	out := &NestedMap2{}
 	err := proto.Unmarshal(data1, out)
 	if err != nil {
 		t.Fatal(err)
