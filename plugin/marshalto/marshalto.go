@@ -884,17 +884,29 @@ func (p *marshalto) generateField(proto3 bool, numGen NumGen, file *generator.Fi
 				p.P(`n`, numGen.Next(), `, err := `, p.typesPkg.Use(), `.StdDurationMarshalTo(`, varName, `, dAtA[i:])`)
 			} else if protoSizer {
 				p.callVarint(varName, `.ProtoSize()`)
-				fd, md := descriptor.ForMessage(message)
-				if gogoproto.IsStableMarshaler(fd, md) {
+				// fd, md := descriptor.ForMessage(message)
+				md := file.GetMessage(fieldname)
+				fdp, mdp := descriptor.ForMessage(md)
+				if gogoproto.IsStableMarshaler(fdp, mdp) {
 					p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
 				} else {
 					p.P(`n`, numGen.Next(), `, err := `, varName, `.DeterministicMarshalTo(dAtA[i:])`)
 				}
 			} else {
 				p.callVarint(varName, `.Size()`)
-				fd, md := descriptor.ForMessage(message)
-				if gogoproto.IsStableMarshaler(fd, md) {
+
+				byName := p.ObjectNamed(field.GetTypeName())
+				desc, _ := byName.(*generator.Descriptor)
+
+				// name								stable option		marshalto/deterministic
+				// "MarshalTo", true)				stable				MarshalTo
+				// "MarshalTo", false)				not stable			MarshalTo
+				// "DeterministicMarshalTo", true) 	not stable 			DeterministicMarshalTo
+
+				if stable && gogoproto.IsStableMarshaler(file.FileDescriptorProto, desc.DescriptorProto) {
 					p.P(`n`, numGen.Next(), `, err := `, varName, `.MarshalTo(dAtA[i:])`)
+				} else if !stable && !gogoproto.IsStableMarshaler(file.FileDescriptorProto, desc.DescriptorProto) {
+					p.P(`n`, numGen.Next(), `, err :=`, varName, `.MarshalTo(dAtA[i:])`)
 				} else {
 					p.P(`n`, numGen.Next(), `, err :=`, varName, `.DeterministicMarshalTo(dAtA[i:])`)
 				}
