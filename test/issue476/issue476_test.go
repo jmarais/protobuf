@@ -64,8 +64,14 @@ func TestAny(t *testing.T) {
 	fmt.Printf("value: %v\n", newEm.Myany)
 	var _ proto.Message = (*types.Any)(newEm.Myany)
 	myProtoMessageFunc(newEm.Myany)
+	mynewfoo := &Foo{}
+	err = types.UnmarshalAny(newEm.Myany, mynewfoo)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("mynewfoo: %v\n", mynewfoo)
 }
 
 func myProtoMessageFunc(pb proto.Message) {
-	fmt.Printf("Here is a pb message: %+v", pb)
+	fmt.Printf("Here is a pb message: %+v\n", pb)
 }
