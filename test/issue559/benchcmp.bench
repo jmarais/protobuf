@@ -1,0 +1,15 @@
+benchmark                       old ns/op     new ns/op     delta
+BenchmarkWideProtobuf1-10       157           163           +3.82%
+BenchmarkWideProtobuf2-10       244           257           +5.33%
+BenchmarkWideProtobuf5-10       479           501           +4.59%
+BenchmarkWideProtobuf10-10      1065          1040          -2.35%
+BenchmarkWideProtobuf20-10      2072          1984          -4.25%
+BenchmarkWideProtobuf50-10      5211          5072          -2.67%
+BenchmarkWideProtobuf100-10     10173         10138         -0.34%
+BenchmarkDeepProtobuf1-10       204           224           +9.80%
+BenchmarkDeepProtobuf2-10       473           427           -9.73%
+BenchmarkDeepProtobuf5-10       1981          993           -49.87%
+BenchmarkDeepProtobuf10-10      6074          1882          -69.02%
+BenchmarkDeepProtobuf20-10      20944         3261          -84.43%
+BenchmarkDeepProtobuf50-10      125053        8410          -93.27%
+BenchmarkDeepProtobuf100-10     481926        17017         -96.47%

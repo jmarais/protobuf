@@ -1,0 +1,19 @@
+goos: linux
+goarch: amd64
+pkg: github.com/gogo/protobuf/test/issue559
+BenchmarkWideProtobuf1-10      	100000000	       163 ns/op
+BenchmarkWideProtobuf2-10      	50000000	       257 ns/op
+BenchmarkWideProtobuf5-10      	30000000	       501 ns/op
+BenchmarkWideProtobuf10-10     	20000000	      1040 ns/op
+BenchmarkWideProtobuf20-10     	10000000	      1984 ns/op
+BenchmarkWideProtobuf50-10     	 3000000	      5072 ns/op
+BenchmarkWideProtobuf100-10    	 1000000	     10138 ns/op
+BenchmarkDeepProtobuf1-10      	100000000	       224 ns/op
+BenchmarkDeepProtobuf2-10      	30000000	       427 ns/op
+BenchmarkDeepProtobuf5-10      	20000000	       993 ns/op
+BenchmarkDeepProtobuf10-10     	10000000	      1882 ns/op
+BenchmarkDeepProtobuf20-10     	 5000000	      3261 ns/op
+BenchmarkDeepProtobuf50-10     	 2000000	      8410 ns/op
+BenchmarkDeepProtobuf100-10    	 1000000	     17017 ns/op
+PASS
+ok  	github.com/gogo/protobuf/test/issue559	259.628s
