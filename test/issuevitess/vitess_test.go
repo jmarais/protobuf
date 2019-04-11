@@ -1,6 +1,6 @@
 // Protocol Buffers for Go with Gadgets
 //
-// Copyright (c) 2015, The GoGo Authors. All rights reserved.
+// Copyright (c) 2019, The GoGo Authors. All rights reserved.
 // http://github.com/gogo/protobuf
 //
 // Redistribution and use in source and binary forms, with or without
@@ -26,29 +26,27 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-package main
+package issuevitess
 
 import (
-	"github.com/gogo/protobuf/vanity"
-	"github.com/gogo/protobuf/vanity/command"
-
-	"github.com/gogo/protobuf/gogoproto"
-	descriptor "github.com/gogo/protobuf/protoc-gen-gogo/descriptor"
+	"fmt"
+	"testing"
 )
 
-func main() {
-	req := command.Read()
-	files := req.GetProtoFile()
-	files = vanity.FilterFiles(files, vanity.NotGoogleProtobufDescriptorProto)
-
-	vanity.ForEachFile(files, vanity.TurnOnMarshalerAll)
-	vanity.ForEachFile(files, TurnOnProtoSizerAll)
-	vanity.ForEachFile(files, vanity.TurnOnUnmarshalerAll)
-
-	resp := command.Generate(req)
-	command.Write(resp)
-}
-
-func TurnOnProtoSizerAll(file *descriptor.FileDescriptorProto) {
-	vanity.SetBoolFileOption(gogoproto.E_ProtosizerAll, true)(file)
+func TestSizeField(t *testing.T) {
+	a := &A{
+		Size: 24,
+	}
+	dat, err := a.Marshal()
+	if err != nil {
+		t.Fatal(err)
+	}
+	dst := &A{}
+	if err := dst.Unmarshal(dat); err != nil {
+		t.Fatal(err)
+	}
+	if !a.Equal(dst) {
+		t.Fatal("message is not equals")
+	}
+	fmt.Printf("%v\n", dst.String())
 }
