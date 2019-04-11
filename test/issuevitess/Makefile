@@ -27,5 +27,5 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 regenerate:
-	go install github.com/gogo/protobuf/protoc-gen-gogofast
-	protoc --gogofast_out=. --proto_path=../../../../../:../../protobuf/:. *.proto
+	go install github.com/gogo/protobuf/protoc-gen-gogovitess
+	protoc --gogovitess_out=. --proto_path=../../../../../:../../protobuf/:. *.proto
