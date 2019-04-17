@@ -10,6 +10,7 @@ import (
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
@@ -947,7 +948,7 @@ func (this *Bar9) Equal(that interface{}) bool {
 func (m *Foo5) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -955,181 +956,202 @@ func (m *Foo5) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Foo5) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Foo5) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
-	i++
-	i = encodeVarintIssue530(dAtA, i, uint64(m.Bar1.Size()))
-	n1, err1 := m.Bar1.MarshalTo(dAtA[i:])
-	if err1 != nil {
-		return 0, err1
-	}
-	i += n1
-	if m.Bar2 != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintIssue530(dAtA, i, uint64(m.Bar2.Size()))
-		n2, err2 := m.Bar2.MarshalTo(dAtA[i:])
-		if err2 != nil {
-			return 0, err2
-		}
-		i += n2
-	}
-	dAtA[i] = 0x1a
-	i++
-	i = encodeVarintIssue530(dAtA, i, uint64(m.Bar3.Size()))
-	n3, err3 := m.Bar3.MarshalTo(dAtA[i:])
-	if err3 != nil {
-		return 0, err3
-	}
-	i += n3
-	if m.Bar4 != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintIssue530(dAtA, i, uint64(m.Bar4.Size()))
-		n4, err4 := m.Bar4.MarshalTo(dAtA[i:])
-		if err4 != nil {
-			return 0, err4
-		}
-		i += n4
-	}
-	if len(m.Bars1) > 0 {
-		for _, msg := range m.Bars1 {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if len(m.Barmap2) > 0 {
+		for k := range m.Barmap2 {
+			v := m.Barmap2[k]
+			baseI := i
+			if v != nil {
+				{
+					size, err := v.LahsramOt(dAtA[:i])
+					if err != nil {
+						return 0, err
+					}
+					i -= size
+					i = encodeVarintIssue530(dAtA, i, uint64(size))
+				}
+				i--
+				dAtA[i] = 0x12
 			}
-			i += n
-		}
-	}
-	if len(m.Bars2) > 0 {
-		for _, msg := range m.Bars2 {
-			dAtA[i] = 0x32
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Bars3) > 0 {
-		for _, msg := range m.Bars3 {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Bars4) > 0 {
-		for _, msg := range m.Bars4 {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Barrs1) > 0 {
-		for _, msg := range m.Barrs1 {
-			dAtA[i] = 0x4a
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Barrs2) > 0 {
-		for _, msg := range m.Barrs2 {
-			dAtA[i] = 0x52
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+			i -= len(k)
+			copy(dAtA[i:], k)
+			i = encodeVarintIssue530(dAtA, i, uint64(len(k)))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintIssue530(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x62
 		}
 	}
 	if len(m.Barmap1) > 0 {
 		for k := range m.Barmap1 {
-			dAtA[i] = 0x5a
-			i++
 			v := m.Barmap1[k]
-			msgSize := 0
+			baseI := i
 			if v != nil {
-				msgSize = v.Size()
-				msgSize += 1 + sovIssue530(uint64(msgSize))
-			}
-			mapSize := 1 + len(k) + sovIssue530(uint64(len(k))) + msgSize
-			i = encodeVarintIssue530(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			if v != nil {
-				dAtA[i] = 0x12
-				i++
-				i = encodeVarintIssue530(dAtA, i, uint64(v.Size()))
-				n5, err5 := v.MarshalTo(dAtA[i:])
-				if err5 != nil {
-					return 0, err5
+				{
+					size, err := v.LahsramOt(dAtA[:i])
+					if err != nil {
+						return 0, err
+					}
+					i -= size
+					i = encodeVarintIssue530(dAtA, i, uint64(size))
 				}
-				i += n5
+				i--
+				dAtA[i] = 0x12
 			}
+			i -= len(k)
+			copy(dAtA[i:], k)
+			i = encodeVarintIssue530(dAtA, i, uint64(len(k)))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintIssue530(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x5a
 		}
 	}
-	if len(m.Barmap2) > 0 {
-		for k := range m.Barmap2 {
-			dAtA[i] = 0x62
-			i++
-			v := m.Barmap2[k]
-			msgSize := 0
-			if v != nil {
-				msgSize = v.Size()
-				msgSize += 1 + sovIssue530(uint64(msgSize))
-			}
-			mapSize := 1 + len(k) + sovIssue530(uint64(len(k))) + msgSize
-			i = encodeVarintIssue530(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			if v != nil {
-				dAtA[i] = 0x12
-				i++
-				i = encodeVarintIssue530(dAtA, i, uint64(v.Size()))
-				n6, err6 := v.MarshalTo(dAtA[i:])
-				if err6 != nil {
-					return 0, err6
+	if len(m.Barrs2) > 0 {
+		for iNdEx := len(m.Barrs2) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Barrs2[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
 				}
-				i += n6
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
 			}
+			i--
+			dAtA[i] = 0x52
 		}
 	}
-	return i, nil
+	if len(m.Barrs1) > 0 {
+		for iNdEx := len(m.Barrs1) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Barrs1[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.Bars4) > 0 {
+		for iNdEx := len(m.Bars4) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars4[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.Bars3) > 0 {
+		for iNdEx := len(m.Bars3) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars3[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.Bars2) > 0 {
+		for iNdEx := len(m.Bars2) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars2[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.Bars1) > 0 {
+		for iNdEx := len(m.Bars1) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars1[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if m.Bar4 != nil {
+		{
+			size, err := m.Bar4.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintIssue530(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	{
+		size, err := m.Bar3.LahsramOt(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintIssue530(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	if m.Bar2 != nil {
+		{
+			size, err := m.Bar2.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintIssue530(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	{
+		size, err := m.Bar1.LahsramOt(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintIssue530(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar1) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1137,21 +1159,27 @@ func (m *Bar1) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar1) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar1) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
-	i++
+	i -= len(m.Str)
+	copy(dAtA[i:], m.Str)
 	i = encodeVarintIssue530(dAtA, i, uint64(len(m.Str)))
-	i += copy(dAtA[i:], m.Str)
-	return i, nil
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar2) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1159,23 +1187,29 @@ func (m *Bar2) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar2) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar2) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Str != nil {
-		dAtA[i] = 0xa
-		i++
+		i -= len(*m.Str)
+		copy(dAtA[i:], *m.Str)
 		i = encodeVarintIssue530(dAtA, i, uint64(len(*m.Str)))
-		i += copy(dAtA[i:], *m.Str)
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar3) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1183,41 +1217,50 @@ func (m *Bar3) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar3) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar3) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Bars4) > 0 {
-		for _, msg := range m.Bars4 {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
 	if len(m.Bars2) > 0 {
-		for _, msg := range m.Bars2 {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Bars2) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars2[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	if len(m.Bars4) > 0 {
+		for iNdEx := len(m.Bars4) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars4[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar4) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1225,21 +1268,27 @@ func (m *Bar4) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar4) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar4) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
-	i++
+	i -= len(m.Str)
+	copy(dAtA[i:], m.Str)
 	i = encodeVarintIssue530(dAtA, i, uint64(len(m.Str)))
-	i += copy(dAtA[i:], m.Str)
-	return i, nil
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar5) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1247,41 +1296,50 @@ func (m *Bar5) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar5) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar5) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Bars2) > 0 {
-		for _, msg := range m.Bars2 {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
 	if len(m.Bars1) > 0 {
-		for _, msg := range m.Bars1 {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Bars1) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars1[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	return i, nil
+	if len(m.Bars2) > 0 {
+		for iNdEx := len(m.Bars2) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars2[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar7) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1289,51 +1347,62 @@ func (m *Bar7) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar7) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar7) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Bars71) > 0 {
-		for _, msg := range m.Bars71 {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Bars72) > 0 {
-		for _, msg := range m.Bars72 {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	dAtA[i] = 0x1a
-	i++
-	i = encodeVarintIssue530(dAtA, i, uint64(len(m.Str1)))
-	i += copy(dAtA[i:], m.Str1)
 	if m.Str2 != nil {
-		dAtA[i] = 0x22
-		i++
+		i -= len(*m.Str2)
+		copy(dAtA[i:], *m.Str2)
 		i = encodeVarintIssue530(dAtA, i, uint64(len(*m.Str2)))
-		i += copy(dAtA[i:], *m.Str2)
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	i -= len(m.Str1)
+	copy(dAtA[i:], m.Str1)
+	i = encodeVarintIssue530(dAtA, i, uint64(len(m.Str1)))
+	i--
+	dAtA[i] = 0x1a
+	if len(m.Bars72) > 0 {
+		for iNdEx := len(m.Bars72) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars72[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Bars71) > 0 {
+		for iNdEx := len(m.Bars71) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars71[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar8) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1341,29 +1410,36 @@ func (m *Bar8) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar8) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar8) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if len(m.Bars1) > 0 {
-		for _, msg := range m.Bars1 {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintIssue530(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Bars1) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Bars1[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintIssue530(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Bar9) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1371,25 +1447,33 @@ func (m *Bar9) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bar9) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Bar9) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
-	i++
+	i -= len(m.Str)
+	copy(dAtA[i:], m.Str)
 	i = encodeVarintIssue530(dAtA, i, uint64(len(m.Str)))
-	i += copy(dAtA[i:], m.Str)
-	return i, nil
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintIssue530(dAtA []byte, offset int, v uint64) int {
+	offset -= sovIssue530(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func NewPopulatedFoo5(r randyIssue530, easy bool) *Foo5 {
 	this := &Foo5{}
@@ -1875,14 +1959,7 @@ func (m *Bar9) Size() (n int) {
 }
 
 func sovIssue530(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozIssue530(x uint64) (n int) {
 	return sovIssue530(uint64((x << 1) ^ uint64((int64(x) >> 63))))

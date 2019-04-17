@@ -15,6 +15,7 @@ import (
 	io "io"
 	io_ioutil "io/ioutil"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
@@ -2044,7 +2045,7 @@ func valueToGoStringUnrecognized(v interface{}, typ string) string {
 func (m *A) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2052,34 +2053,41 @@ func (m *A) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *A) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *A) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if m.Field1 != nil {
+		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
+		i--
+		dAtA[i] = 0x10
+	}
 	if len(m.B) > 0 {
-		for _, msg := range m.B {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintUnrecognized(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.B) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.B[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintUnrecognized(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	if m.Field1 != nil {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *B) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2087,50 +2095,62 @@ func (m *B) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *B) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *B) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.C != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(m.C.Size()))
-		n1, err1 := m.C.MarshalTo(dAtA[i:])
-		if err1 != nil {
-			return 0, err1
-		}
-		i += n1
-	}
-	if m.D != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(m.D.Size()))
-		n2, err2 := m.D.MarshalTo(dAtA[i:])
-		if err2 != nil {
-			return 0, err2
-		}
-		i += n2
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.F != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(m.F.Size()))
-		n3, err3 := m.F.MarshalTo(dAtA[i:])
-		if err3 != nil {
-			return 0, err3
+		{
+			size, err := m.F.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintUnrecognized(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x2a
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.D != nil {
+		{
+			size, err := m.D.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintUnrecognized(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
 	}
-	return i, nil
+	if m.C != nil {
+		{
+			size, err := m.C.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintUnrecognized(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *D) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2138,25 +2158,31 @@ func (m *D) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *D) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *D) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Field1 != nil {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
-	}
 	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return i, nil
+	if m.Field1 != nil {
+		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *C) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2164,60 +2190,68 @@ func (m *C) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *C) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *C) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Field2 != nil {
-		dAtA[i] = 0x11
-		i++
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field2))))
-		i += 8
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.Field3 != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(len(*m.Field3)))
-		i += copy(dAtA[i:], *m.Field3)
-	}
-	if m.Field4 != nil {
-		dAtA[i] = 0x21
-		i++
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field4))))
-		i += 8
-	}
-	if len(m.Field5) > 0 {
-		for _, b := range m.Field5 {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintUnrecognized(dAtA, i, uint64(len(b)))
-			i += copy(dAtA[i:], b)
+	if len(m.Field7) > 0 {
+		for iNdEx := len(m.Field7) - 1; iNdEx >= 0; iNdEx-- {
+			f4 := math.Float32bits(float32(m.Field7[iNdEx]))
+			i -= 4
+			encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(f4))
+			i--
+			dAtA[i] = 0x3d
 		}
 	}
 	if m.Field6 != nil {
-		dAtA[i] = 0x30
-		i++
 		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field6))
+		i--
+		dAtA[i] = 0x30
 	}
-	if len(m.Field7) > 0 {
-		for _, num := range m.Field7 {
-			dAtA[i] = 0x3d
-			i++
-			f4 := math.Float32bits(float32(num))
-			encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(f4))
-			i += 4
+	if len(m.Field5) > 0 {
+		for iNdEx := len(m.Field5) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Field5[iNdEx])
+			copy(dAtA[i:], m.Field5[iNdEx])
+			i = encodeVarintUnrecognized(dAtA, i, uint64(len(m.Field5[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
 		}
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Field4 != nil {
+		i -= 8
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field4))))
+		i--
+		dAtA[i] = 0x21
 	}
-	return i, nil
+	if m.Field3 != nil {
+		i -= len(*m.Field3)
+		copy(dAtA[i:], *m.Field3)
+		i = encodeVarintUnrecognized(dAtA, i, uint64(len(*m.Field3)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Field2 != nil {
+		i -= 8
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field2))))
+		i--
+		dAtA[i] = 0x11
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *U) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2225,31 +2259,36 @@ func (m *U) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *U) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *U) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if m.Field3 != nil {
+		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field3))
+		i--
+		dAtA[i] = 0x18
+	}
 	if len(m.Field2) > 0 {
-		for _, num := range m.Field2 {
-			dAtA[i] = 0x11
-			i++
-			f5 := math.Float64bits(float64(num))
+		for iNdEx := len(m.Field2) - 1; iNdEx >= 0; iNdEx-- {
+			f5 := math.Float64bits(float64(m.Field2[iNdEx]))
+			i -= 8
 			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f5))
-			i += 8
+			i--
+			dAtA[i] = 0x11
 		}
 	}
-	if m.Field3 != nil {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field3))
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *OldA) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2257,34 +2296,41 @@ func (m *OldA) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OldA) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *OldA) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if m.Field1 != nil {
+		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
+		i--
+		dAtA[i] = 0x10
+	}
 	if len(m.B) > 0 {
-		for _, msg := range m.B {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintUnrecognized(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.B) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.B[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintUnrecognized(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	if m.Field1 != nil {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *OldB) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2292,40 +2338,50 @@ func (m *OldB) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OldB) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *OldB) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.C != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(m.C.Size()))
-		n6, err6 := m.C.MarshalTo(dAtA[i:])
-		if err6 != nil {
-			return 0, err6
-		}
-		i += n6
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.F != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(m.F.Size()))
-		n7, err7 := m.F.MarshalTo(dAtA[i:])
-		if err7 != nil {
-			return 0, err7
+		{
+			size, err := m.F.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintUnrecognized(dAtA, i, uint64(size))
 		}
-		i += n7
+		i--
+		dAtA[i] = 0x2a
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.C != nil {
+		{
+			size, err := m.C.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintUnrecognized(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *OldC) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2333,51 +2389,58 @@ func (m *OldC) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OldC) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *OldC) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Field1 != nil {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
-	}
-	if m.Field2 != nil {
-		dAtA[i] = 0x11
-		i++
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field2))))
-		i += 8
-	}
-	if m.Field3 != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(len(*m.Field3)))
-		i += copy(dAtA[i:], *m.Field3)
-	}
-	if m.Field6 != nil {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field6))
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if len(m.Field7) > 0 {
-		for _, num := range m.Field7 {
-			dAtA[i] = 0x3d
-			i++
-			f8 := math.Float32bits(float32(num))
+		for iNdEx := len(m.Field7) - 1; iNdEx >= 0; iNdEx-- {
+			f8 := math.Float32bits(float32(m.Field7[iNdEx]))
+			i -= 4
 			encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(f8))
-			i += 4
+			i--
+			dAtA[i] = 0x3d
 		}
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Field6 != nil {
+		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field6))
+		i--
+		dAtA[i] = 0x30
 	}
-	return i, nil
+	if m.Field3 != nil {
+		i -= len(*m.Field3)
+		copy(dAtA[i:], *m.Field3)
+		i = encodeVarintUnrecognized(dAtA, i, uint64(len(*m.Field3)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Field2 != nil {
+		i -= 8
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(*m.Field2))))
+		i--
+		dAtA[i] = 0x11
+	}
+	if m.Field1 != nil {
+		i = encodeVarintUnrecognized(dAtA, i, uint64(*m.Field1))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *OldU) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -2385,39 +2448,48 @@ func (m *OldU) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OldU) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *OldU) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Field1 != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintUnrecognized(dAtA, i, uint64(len(*m.Field1)))
-		i += copy(dAtA[i:], *m.Field1)
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if len(m.Field2) > 0 {
-		for _, num := range m.Field2 {
-			dAtA[i] = 0x11
-			i++
-			f9 := math.Float64bits(float64(num))
+		for iNdEx := len(m.Field2) - 1; iNdEx >= 0; iNdEx-- {
+			f9 := math.Float64bits(float64(m.Field2[iNdEx]))
+			i -= 8
 			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f9))
-			i += 8
+			i--
+			dAtA[i] = 0x11
 		}
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Field1 != nil {
+		i -= len(*m.Field1)
+		copy(dAtA[i:], *m.Field1)
+		i = encodeVarintUnrecognized(dAtA, i, uint64(len(*m.Field1)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintUnrecognized(dAtA []byte, offset int, v uint64) int {
+	offset -= sovUnrecognized(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func NewPopulatedA(r randyUnrecognized, easy bool) *A {
 	this := &A{}
@@ -2954,14 +3026,7 @@ func (m *OldU) Size() (n int) {
 }
 
 func sovUnrecognized(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozUnrecognized(x uint64) (n int) {
 	return sovUnrecognized(uint64((x << 1) ^ uint64((int64(x) >> 63))))

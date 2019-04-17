@@ -9,6 +9,7 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strconv "strconv"
 	strings "strings"
@@ -1404,7 +1405,7 @@ func valueToGoStringType(v interface{}, typ string) string {
 func (m *Type) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1412,80 +1413,87 @@ func (m *Type) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Type) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Type) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if len(m.Fields) > 0 {
-		for _, msg := range m.Fields {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
+	if m.Syntax != 0 {
+		i = encodeVarintType(dAtA, i, uint64(m.Syntax))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.SourceContext != nil {
+		{
+			size, err := m.SourceContext.LahsramOt(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
-			i += n
+			i -= size
+			i = encodeVarintType(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Options) > 0 {
+		for iNdEx := len(m.Options) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Options[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintType(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
 		}
 	}
 	if len(m.Oneofs) > 0 {
-		for _, s := range m.Oneofs {
+		for iNdEx := len(m.Oneofs) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Oneofs[iNdEx])
+			copy(dAtA[i:], m.Oneofs[iNdEx])
+			i = encodeVarintType(dAtA, i, uint64(len(m.Oneofs[iNdEx])))
+			i--
 			dAtA[i] = 0x1a
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
+		}
+	}
+	if len(m.Fields) > 0 {
+		for iNdEx := len(m.Fields) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Fields[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintType(dAtA, i, uint64(size))
 			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if len(m.Options) > 0 {
-		for _, msg := range m.Options {
-			dAtA[i] = 0x22
-			i++
-			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
 	}
-	if m.SourceContext != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.SourceContext.Size()))
-		n1, err1 := m.SourceContext.MarshalTo(dAtA[i:])
-		if err1 != nil {
-			return 0, err1
-		}
-		i += n1
-	}
-	if m.Syntax != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.Syntax))
-	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Field) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1493,86 +1501,98 @@ func (m *Field) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Field) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Field) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Kind != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.Kind))
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.Cardinality != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.Cardinality))
+	if len(m.DefaultValue) > 0 {
+		i -= len(m.DefaultValue)
+		copy(dAtA[i:], m.DefaultValue)
+		i = encodeVarintType(dAtA, i, uint64(len(m.DefaultValue)))
+		i--
+		dAtA[i] = 0x5a
 	}
-	if m.Number != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.Number))
+	if len(m.JsonName) > 0 {
+		i -= len(m.JsonName)
+		copy(dAtA[i:], m.JsonName)
+		i = encodeVarintType(dAtA, i, uint64(len(m.JsonName)))
+		i--
+		dAtA[i] = 0x52
 	}
-	if len(m.Name) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
-	}
-	if len(m.TypeUrl) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.TypeUrl)))
-		i += copy(dAtA[i:], m.TypeUrl)
-	}
-	if m.OneofIndex != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.OneofIndex))
+	if len(m.Options) > 0 {
+		for iNdEx := len(m.Options) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Options[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintType(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
 	}
 	if m.Packed {
-		dAtA[i] = 0x40
-		i++
+		i--
 		if m.Packed {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x40
 	}
-	if len(m.Options) > 0 {
-		for _, msg := range m.Options {
-			dAtA[i] = 0x4a
-			i++
-			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
+	if m.OneofIndex != 0 {
+		i = encodeVarintType(dAtA, i, uint64(m.OneofIndex))
+		i--
+		dAtA[i] = 0x38
 	}
-	if len(m.JsonName) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.JsonName)))
-		i += copy(dAtA[i:], m.JsonName)
+	if len(m.TypeUrl) > 0 {
+		i -= len(m.TypeUrl)
+		copy(dAtA[i:], m.TypeUrl)
+		i = encodeVarintType(dAtA, i, uint64(len(m.TypeUrl)))
+		i--
+		dAtA[i] = 0x32
 	}
-	if len(m.DefaultValue) > 0 {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.DefaultValue)))
-		i += copy(dAtA[i:], m.DefaultValue)
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x22
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Number != 0 {
+		i = encodeVarintType(dAtA, i, uint64(m.Number))
+		i--
+		dAtA[i] = 0x18
 	}
-	return i, nil
+	if m.Cardinality != 0 {
+		i = encodeVarintType(dAtA, i, uint64(m.Cardinality))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Kind != 0 {
+		i = encodeVarintType(dAtA, i, uint64(m.Kind))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Enum) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1580,65 +1600,78 @@ func (m *Enum) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Enum) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Enum) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
-	}
-	if len(m.Enumvalue) > 0 {
-		for _, msg := range m.Enumvalue {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.Options) > 0 {
-		for _, msg := range m.Options {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.SourceContext != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.SourceContext.Size()))
-		n2, err2 := m.SourceContext.MarshalTo(dAtA[i:])
-		if err2 != nil {
-			return 0, err2
-		}
-		i += n2
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.Syntax != 0 {
-		dAtA[i] = 0x28
-		i++
 		i = encodeVarintType(dAtA, i, uint64(m.Syntax))
+		i--
+		dAtA[i] = 0x28
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.SourceContext != nil {
+		{
+			size, err := m.SourceContext.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintType(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
 	}
-	return i, nil
+	if len(m.Options) > 0 {
+		for iNdEx := len(m.Options) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Options[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintType(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Enumvalue) > 0 {
+		for iNdEx := len(m.Enumvalue) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Enumvalue[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintType(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *EnumValue) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1646,43 +1679,52 @@ func (m *EnumValue) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *EnumValue) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *EnumValue) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
-	}
-	if m.Number != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.Number))
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if len(m.Options) > 0 {
-		for _, msg := range m.Options {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintType(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.Options) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Options[iNdEx].LahsramOt(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintType(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x1a
 		}
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Number != 0 {
+		i = encodeVarintType(dAtA, i, uint64(m.Number))
+		i--
+		dAtA[i] = 0x10
 	}
-	return i, nil
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *Option) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1690,40 +1732,51 @@ func (m *Option) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Option) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *Option) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.Value != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintType(dAtA, i, uint64(m.Value.Size()))
-		n3, err3 := m.Value.MarshalTo(dAtA[i:])
-		if err3 != nil {
-			return 0, err3
+		{
+			size, err := m.Value.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintType(dAtA, i, uint64(size))
 		}
-		i += n3
+		i--
+		dAtA[i] = 0x12
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintType(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintType(dAtA []byte, offset int, v uint64) int {
+	offset -= sovType(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func NewPopulatedType(r randyType, easy bool) *Type {
 	this := &Type{}
@@ -2089,14 +2142,7 @@ func (m *Option) Size() (n int) {
 }
 
 func sovType(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozType(x uint64) (n int) {
 	return sovType(uint64((x << 1) ^ uint64((int64(x) >> 63))))

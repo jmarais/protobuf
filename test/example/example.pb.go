@@ -16,6 +16,7 @@ import (
 	io "io"
 	io_ioutil "io/ioutil"
 	math "math"
+	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
@@ -1316,7 +1317,7 @@ func valueToGoStringExample(v interface{}, typ string) string {
 func (m *A) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1324,35 +1325,44 @@ func (m *A) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *A) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *A) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
-	i++
-	i = encodeVarintExample(dAtA, i, uint64(len(m.Description)))
-	i += copy(dAtA[i:], m.Description)
-	dAtA[i] = 0x10
-	i++
-	i = encodeVarintExample(dAtA, i, uint64(m.Number))
-	dAtA[i] = 0x1a
-	i++
-	i = encodeVarintExample(dAtA, i, uint64(m.Id.Size()))
-	n1, err1 := m.Id.MarshalTo(dAtA[i:])
-	if err1 != nil {
-		return 0, err1
-	}
-	i += n1
 	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return i, nil
+	{
+		size := m.Id.Size()
+		i -= size
+		if _, err := m.Id.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintExample(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	i = encodeVarintExample(dAtA, i, uint64(m.Number))
+	i--
+	dAtA[i] = 0x10
+	i -= len(m.Description)
+	copy(dAtA[i:], m.Description)
+	i = encodeVarintExample(dAtA, i, uint64(len(m.Description)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 
 func (m *B) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1360,40 +1370,50 @@ func (m *B) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *B) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *B) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	dAtA[i] = 0xa
-	i++
-	i = encodeVarintExample(dAtA, i, uint64(m.A.Size()))
-	n2, err2 := m.A.MarshalTo(dAtA[i:])
-	if err2 != nil {
-		return 0, err2
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	i += n2
 	if len(m.G) > 0 {
-		for _, msg := range m.G {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintExample(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.G) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size := m.G[iNdEx].Size()
+				i -= size
+				if _, err := m.G[iNdEx].MarshalTo(dAtA[i:]); err != nil {
+					return 0, err
+				}
+				i = encodeVarintExample(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	{
+		size, err := m.A.LahsramOt(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintExample(dAtA, i, uint64(size))
 	}
-	return i, nil
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 
 func (m *C) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1401,25 +1421,31 @@ func (m *C) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *C) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *C) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.MySize != nil {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintExample(dAtA, i, uint64(*m.MySize))
-	}
 	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return i, nil
+	if m.MySize != nil {
+		i = encodeVarintExample(dAtA, i, uint64(*m.MySize))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *U) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1427,40 +1453,50 @@ func (m *U) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *U) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *U) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.A != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintExample(dAtA, i, uint64(m.A.Size()))
-		n3, err3 := m.A.MarshalTo(dAtA[i:])
-		if err3 != nil {
-			return 0, err3
-		}
-		i += n3
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.B != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintExample(dAtA, i, uint64(m.B.Size()))
-		n4, err4 := m.B.MarshalTo(dAtA[i:])
-		if err4 != nil {
-			return 0, err4
+		{
+			size, err := m.B.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintExample(dAtA, i, uint64(size))
 		}
-		i += n4
+		i--
+		dAtA[i] = 0x12
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.A != nil {
+		{
+			size, err := m.A.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintExample(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *E) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1468,23 +1504,30 @@ func (m *E) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *E) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *E) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_extensions != nil {
-		i += copy(dAtA[i:], m.XXX_extensions)
-	}
 	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return i, nil
+	if m.XXX_extensions != nil {
+		i -= len(m.XXX_extensions)
+		copy(dAtA[i:], m.XXX_extensions)
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *R) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1492,22 +1535,27 @@ func (m *R) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *R) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *R) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
 	if m.Recognized != nil {
-		dAtA[i] = 0x8
-		i++
 		i = encodeVarintExample(dAtA, i, uint64(*m.Recognized))
+		i--
+		dAtA[i] = 0x8
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *CastType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1515,29 +1563,37 @@ func (m *CastType) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *CastType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *CastType) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Int32 != nil {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintExample(dAtA, i, uint64(*m.Int32))
-	}
 	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return i, nil
+	if m.Int32 != nil {
+		i = encodeVarintExample(dAtA, i, uint64(*m.Int32))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintExample(dAtA []byte, offset int, v uint64) int {
+	offset -= sovExample(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func NewPopulatedA(r randyExample, easy bool) *A {
 	this := &A{}
@@ -1829,14 +1885,7 @@ func (m *CastType) Size() (n int) {
 }
 
 func sovExample(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozExample(x uint64) (n int) {
 	return sovExample(uint64((x << 1) ^ uint64((int64(x) >> 63))))

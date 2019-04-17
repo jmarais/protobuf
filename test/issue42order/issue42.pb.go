@@ -10,6 +10,7 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
+	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -157,7 +158,7 @@ var fileDescriptor_fb4aafed97be2033 = []byte{
 func (m *UnorderedFields) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -165,31 +166,37 @@ func (m *UnorderedFields) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *UnorderedFields) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *UnorderedFields) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.B != nil {
-		dAtA[i] = 0x9
-		i++
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.B))
-		i += 8
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.A != nil {
-		dAtA[i] = 0x50
-		i++
 		i = encodeVarintIssue42(dAtA, i, uint64(*m.A))
+		i--
+		dAtA[i] = 0x50
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.B != nil {
+		i -= 8
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.B))
+		i--
+		dAtA[i] = 0x9
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *OrderedFields) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -197,35 +204,43 @@ func (m *OrderedFields) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *OrderedFields) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *OrderedFields) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.B != nil {
-		dAtA[i] = 0x9
-		i++
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.B))
-		i += 8
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.A != nil {
-		dAtA[i] = 0x50
-		i++
 		i = encodeVarintIssue42(dAtA, i, uint64(*m.A))
+		i--
+		dAtA[i] = 0x50
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.B != nil {
+		i -= 8
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(*m.B))
+		i--
+		dAtA[i] = 0x9
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintIssue42(dAtA []byte, offset int, v uint64) int {
+	offset -= sovIssue42(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func NewPopulatedUnorderedFields(r randyIssue42, easy bool) *UnorderedFields {
 	this := &UnorderedFields{}
@@ -374,14 +389,7 @@ func (m *OrderedFields) Size() (n int) {
 }
 
 func sovIssue42(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
+	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozIssue42(x uint64) (n int) {
 	return sovIssue42(uint64((x << 1) ^ uint64((int64(x) >> 63))))
