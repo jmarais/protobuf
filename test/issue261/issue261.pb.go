@@ -47,7 +47,7 @@ func (m *MapStdTypes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return xxx_messageInfo_MapStdTypes.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}

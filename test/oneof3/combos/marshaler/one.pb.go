@@ -50,7 +50,7 @@ func (m *Subby) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Subby.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -106,7 +106,7 @@ func (m *SampleOneOf) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return xxx_messageInfo_SampleOneOf.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}

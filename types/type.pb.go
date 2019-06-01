@@ -206,7 +206,7 @@ func (m *Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Type.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -313,7 +313,7 @@ func (m *Field) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Field.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -436,7 +436,7 @@ func (m *Enum) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Enum.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -520,7 +520,7 @@ func (m *EnumValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_EnumValue.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -595,7 +595,7 @@ func (m *Option) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Option.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}

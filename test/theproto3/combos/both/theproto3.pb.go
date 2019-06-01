@@ -117,7 +117,7 @@ func (m *Message) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Message.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -156,7 +156,7 @@ func (m *Nested) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Nested.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -211,7 +211,7 @@ func (m *AllMaps) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_AllMaps.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -263,7 +263,7 @@ func (m *AllMapsOrdered) XXX_Unmarshal(b []byte) error {
 }
 func (m *AllMapsOrdered) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
-	n, err := m.MarshalTo(b)
+	n, err := m.LahsramOt(b)
 	if err != nil {
 		return nil, err
 	}
@@ -303,7 +303,7 @@ func (m *MessageWithMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return xxx_messageInfo_MessageWithMap.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -342,7 +342,7 @@ func (m *FloatingPoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return xxx_messageInfo_FloatingPoint.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -382,7 +382,7 @@ func (m *Uint128Pair) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return xxx_messageInfo_Uint128Pair.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -420,7 +420,7 @@ func (m *ContainsNestedMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return xxx_messageInfo_ContainsNestedMap.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -459,7 +459,7 @@ func (m *ContainsNestedMap_NestedMap) XXX_Marshal(b []byte, deterministic bool) 
 		return xxx_messageInfo_ContainsNestedMap_NestedMap.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -498,7 +498,7 @@ func (m *NotPacked) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_NotPacked.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}

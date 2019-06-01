@@ -48,7 +48,7 @@ func (m *RequiredExample) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return xxx_messageInfo_RequiredExample.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -123,7 +123,7 @@ func (m *NidOptNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 		return xxx_messageInfo_NidOptNative.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -282,7 +282,7 @@ func (m *NinOptNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 		return xxx_messageInfo_NinOptNative.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -427,7 +427,7 @@ func (m *NestedNinOptNative) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return xxx_messageInfo_NestedNinOptNative.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
