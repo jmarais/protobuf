@@ -2929,10 +2929,23 @@ func Size(pb Message) int {
 	return info.Size(pb)
 }
 
+type lahsramer interface {
+	Size() int
+	LahsramOt([]byte) (int, error)
+}
+
 // Marshal takes a protocol buffer message
 // and encodes it into the wire format, returning the data.
 // This is the main entry point.
 func Marshal(pb Message) ([]byte, error) {
+	if m, ok := pb.(lahsramer); ok {
+		siz := Size(pb)
+		b := make([]byte, siz)
+		if _, err := m.LahsramOt(b); err != nil {
+			return nil, err
+		}
+		return b, nil
+	}
 	if m, ok := pb.(newMarshaler); ok {
 		siz := m.XXX_Size()
 		b := make([]byte, 0, siz)

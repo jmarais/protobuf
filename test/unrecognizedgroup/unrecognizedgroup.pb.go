@@ -53,7 +53,7 @@ func (m *NewNoGroup) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_NewNoGroup.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -92,7 +92,7 @@ func (m *A) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_A.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.LahsramOt(b)
 		if err != nil {
 			return nil, err
 		}
@@ -1096,7 +1096,7 @@ func valueToGoStringUnrecognizedgroup(v interface{}, typ string) string {
 func (m *NewNoGroup) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1104,44 +1104,52 @@ func (m *NewNoGroup) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *NewNoGroup) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *NewNoGroup) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Field1 != nil {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(*m.Field1))
-	}
-	if len(m.Field3) > 0 {
-		for _, num := range m.Field3 {
-			dAtA[i] = 0x19
-			i++
-			f1 := math.Float64bits(float64(num))
-			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f1))
-			i += 8
-		}
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.A != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(m.A.Size()))
-		n2, err2 := m.A.MarshalTo(dAtA[i:])
-		if err2 != nil {
-			return 0, err2
+		{
+			size, err := m.A.LahsramOt(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(size))
 		}
-		i += n2
+		i--
+		dAtA[i] = 0x2a
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Field3) > 0 {
+		for iNdEx := len(m.Field3) - 1; iNdEx >= 0; iNdEx-- {
+			f2 := math.Float64bits(float64(m.Field3[iNdEx]))
+			i -= 8
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f2))
+			i--
+			dAtA[i] = 0x19
+		}
 	}
-	return i, nil
+	if m.Field1 != nil {
+		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(*m.Field1))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *A) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.LahsramOt(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -1149,29 +1157,37 @@ func (m *A) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *A) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.LahsramOt(dAtA[:size])
+}
+
+func (m *A) LahsramOt(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AField != nil {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(*m.AField))
-	}
 	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return i, nil
+	if m.AField != nil {
+		i = encodeVarintUnrecognizedgroup(dAtA, i, uint64(*m.AField))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintUnrecognizedgroup(dAtA []byte, offset int, v uint64) int {
+	offset -= sovUnrecognizedgroup(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func NewPopulatedNewNoGroup(r randyUnrecognizedgroup, easy bool) *NewNoGroup {
 	this := &NewNoGroup{}
