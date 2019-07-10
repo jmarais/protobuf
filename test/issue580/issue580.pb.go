@@ -4,9 +4,7 @@
 package issue580
 
 import (
-	bytes "bytes"
 	fmt "fmt"
-	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	math "math"
 )
@@ -25,24 +23,33 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 type MyMessage_MyEnum int32
 
 const (
-	MyMessage_MYCASE0 MyMessage_MyEnum = 0
-	MyMessage_MYCASE1 MyMessage_MyEnum = 1
-	MyMessage_MYCASE2 MyMessage_MyEnum = 2
-	MyMessage_MYCASE3 MyMessage_MyEnum = 3
+	MyMessage_CASE0 MyMessage_MyEnum = 0
+	MyMessage_CASE1 MyMessage_MyEnum = 1
+	MyMessage_CASE2 MyMessage_MyEnum = 2
+	MyMessage_CASE3 MyMessage_MyEnum = 3
+	MyMessage_CASE4 MyMessage_MyEnum = 4
+	MyMessage_CASE5 MyMessage_MyEnum = 5
+	MyMessage_CASE6 MyMessage_MyEnum = 6
 )
 
 var MyMessage_MyEnum_name = map[int32]string{
-	0: "MYCASE0",
-	1: "MYCASE1",
-	2: "MYCASE2",
-	3: "MYCASE3",
+	0: "CASE0",
+	1: "CASE1",
+	2: "CASE2",
+	3: "CASE3",
+	4: "CASE4",
+	5: "CASE5",
+	6: "CASE6",
 }
 
 var MyMessage_MyEnum_value = map[string]int32{
-	"MYCASE0": 0,
-	"MYCASE1": 1,
-	"MYCASE2": 2,
-	"MYCASE3": 3,
+	"CASE0": 0,
+	"CASE1": 1,
+	"CASE2": 2,
+	"CASE3": 3,
+	"CASE4": 4,
+	"CASE5": 5,
+	"CASE6": 6,
 }
 
 func (x MyMessage_MyEnum) String() string {
@@ -54,7 +61,7 @@ func (MyMessage_MyEnum) EnumDescriptor() ([]byte, []int) {
 }
 
 type MyMessage struct {
-	EnumField            MyMessage_MyEnum `protobuf:"varint,15,opt,name=enum_field,json=enumField,proto3,enum=issue580.MyMessage_MyEnum" json:"enum_field,omitempty"`
+	E                    MyMessage_MyEnum `protobuf:"varint,15,opt,name=e,proto3,enum=issue580.MyMessage_MyEnum" json:"e,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_unrecognized     []byte           `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
@@ -84,11 +91,11 @@ func (m *MyMessage) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MyMessage proto.InternalMessageInfo
 
-func (m *MyMessage) GetEnumField() MyMessage_MyEnum {
+func (m *MyMessage) GetE() MyMessage_MyEnum {
 	if m != nil {
-		return m.EnumField
+		return m.E
 	}
-	return MyMessage_MYCASE0
+	return MyMessage_CASE0
 }
 
 func init() {
@@ -99,126 +106,14 @@ func init() {
 func init() { proto.RegisterFile("issue580.proto", fileDescriptor_2e2ba514aa42e113) }
 
 var fileDescriptor_2e2ba514aa42e113 = []byte{
-	// 182 bytes of a gzipped FileDescriptorProto
+	// 136 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xcb, 0x2c, 0x2e, 0x2e,
-	0x4d, 0x35, 0xb5, 0x30, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x80, 0xf1, 0xa5, 0x74,
-	0xd3, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xf5, 0xd3, 0xf3, 0xd3, 0xf3, 0xf5,
-	0xc1, 0x0a, 0x92, 0x4a, 0xd3, 0xc0, 0x3c, 0x30, 0x07, 0xcc, 0x82, 0x68, 0x54, 0x6a, 0x61, 0xe4,
-	0xe2, 0xf4, 0xad, 0xf4, 0x4d, 0x2d, 0x2e, 0x4e, 0x4c, 0x4f, 0x15, 0xb2, 0xe4, 0xe2, 0x4a, 0xcd,
-	0x2b, 0xcd, 0x8d, 0x4f, 0xcb, 0x4c, 0xcd, 0x49, 0x91, 0xe0, 0x57, 0x60, 0xd4, 0xe0, 0x33, 0x92,
-	0xd2, 0x83, 0xdb, 0x05, 0x57, 0xa8, 0xe7, 0x5b, 0xe9, 0x9a, 0x57, 0x9a, 0x1b, 0xc4, 0x09, 0x52,
-	0xed, 0x06, 0x52, 0xac, 0x64, 0xc3, 0xc5, 0x06, 0x11, 0x14, 0xe2, 0xe6, 0x62, 0xf7, 0x8d, 0x74,
-	0x76, 0x0c, 0x76, 0x35, 0x10, 0x60, 0x40, 0x70, 0x0c, 0x05, 0x18, 0x11, 0x1c, 0x23, 0x01, 0x26,
-	0x04, 0xc7, 0x58, 0x80, 0xd9, 0x89, 0xe7, 0xc7, 0x43, 0x39, 0xc6, 0x15, 0x8f, 0xe4, 0x18, 0x77,
-	0x3c, 0x92, 0x63, 0x4c, 0x62, 0x03, 0xbb, 0xcd, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x3f, 0x7d,
-	0x7f, 0x5a, 0xe6, 0x00, 0x00, 0x00,
-}
-
-func (this *MyMessage) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MyMessage)
-	if !ok {
-		that2, ok := that.(MyMessage)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.EnumField != that1.EnumField {
-		return false
-	}
-	if !bytes.Equal(this.XXX_unrecognized, that1.XXX_unrecognized) {
-		return false
-	}
-	return true
-}
-func NewPopulatedMyMessage(r randyIssue580, easy bool) *MyMessage {
-	this := &MyMessage{}
-	this.EnumField = MyMessage_MyEnum([]int32{0, 1, 2, 3}[r.Intn(4)])
-	if !easy && r.Intn(10) != 0 {
-		this.XXX_unrecognized = randUnrecognizedIssue580(r, 16)
-	}
-	return this
-}
-
-type randyIssue580 interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneIssue580(r randyIssue580) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringIssue580(r randyIssue580) string {
-	v1 := r.Intn(100)
-	tmps := make([]rune, v1)
-	for i := 0; i < v1; i++ {
-		tmps[i] = randUTF8RuneIssue580(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedIssue580(r randyIssue580, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldIssue580(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldIssue580(dAtA []byte, r randyIssue580, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateIssue580(dAtA, uint64(key))
-		v2 := r.Int63()
-		if r.Intn(2) == 0 {
-			v2 *= -1
-		}
-		dAtA = encodeVarintPopulateIssue580(dAtA, uint64(v2))
-	case 1:
-		dAtA = encodeVarintPopulateIssue580(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateIssue580(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateIssue580(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateIssue580(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateIssue580(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
+	0x4d, 0x35, 0xb5, 0x30, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x80, 0xf1, 0x95, 0x7a,
+	0x18, 0xb9, 0x38, 0x7d, 0x2b, 0x7d, 0x53, 0x8b, 0x8b, 0x13, 0xd3, 0x53, 0x85, 0x34, 0xb8, 0x18,
+	0x53, 0x25, 0xf8, 0x15, 0x18, 0x35, 0xf8, 0x8c, 0xa4, 0xf4, 0xe0, 0x7a, 0xe0, 0xf2, 0x7a, 0xbe,
+	0x95, 0xae, 0x79, 0xa5, 0xb9, 0x41, 0x8c, 0xa9, 0x4a, 0xa1, 0x5c, 0x6c, 0x10, 0x8e, 0x10, 0x27,
+	0x17, 0xab, 0xb3, 0x63, 0xb0, 0xab, 0x81, 0x00, 0x03, 0x8c, 0x69, 0x28, 0xc0, 0x08, 0x63, 0x1a,
+	0x09, 0x30, 0xc1, 0x98, 0xc6, 0x02, 0xcc, 0x30, 0xa6, 0x89, 0x00, 0x0b, 0x8c, 0x69, 0x2a, 0xc0,
+	0x0a, 0x63, 0x9a, 0x09, 0xb0, 0x25, 0xb1, 0x81, 0xdd, 0x67, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff,
+	0x71, 0xea, 0x13, 0x16, 0xb1, 0x00, 0x00, 0x00,
 }

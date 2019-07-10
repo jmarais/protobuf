@@ -30,18 +30,15 @@ syntax = "proto3";
 
 package issue580;
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-
-option (gogoproto.testgen_all) = true;
-option (gogoproto.populate_all) = true;
-option (gogoproto.equal_all) = true;
-
 message MyMessage {
-  enum MyEnum {
-    MYCASE0 = 0;
-    MYCASE1 = 1;
-    MYCASE2 = 2;
-    MYCASE3 = 3;
-  }
-  MyEnum enum_field = 15;
+    enum MyEnum {
+        CASE0 = 0;
+        CASE1 = 1;
+        CASE2 = 2;
+        CASE3 = 3;
+        CASE4 = 4;
+        CASE5 = 5;
+        CASE6 = 6;
+    }
+    MyEnum e = 15;
 }
