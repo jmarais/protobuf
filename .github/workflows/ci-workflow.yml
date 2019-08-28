@@ -16,7 +16,7 @@ jobs:
       - name: Checkout ${{ github.ref }}
         uses: actions/checkout@v1
         with:
-          path: gopath/src/github.com/protobuf
+          path: gopath/src/github.com/gogo/protobuf
       - name: Setup go-${{ matrix.go_version }}
         uses: actions/setup-go@v1
         with:
