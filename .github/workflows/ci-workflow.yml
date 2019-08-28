@@ -6,7 +6,7 @@ on:
 
 jobs:
   build_and_test:
-    name: Build go-${{ matrix.go_version }} - protobuf-${{ matrix.protobuf_version }}
+    name: go ${{ matrix.go_version }} - pb-${{ matrix.protobuf_version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,7 +25,7 @@ jobs:
         with:
           go-version: ${{ matrix.go_version }}
           
-      - name: Setup protoc ${{ matrix.protobuf_version }}
+      - name: Setup protoc
         env:
           PROTOBUF_VERSION: ${{ matrix.protobuf_version }}
         run: ./install-protobuf.sh
