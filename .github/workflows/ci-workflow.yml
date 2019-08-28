@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout ${{ github.ref }}
         uses: actions/checkout@v1
+        with:
+          path: gopath/src/github.com/protobuf
       - name: Setup go-${{ matrix.go_version }}
         uses: actions/setup-go@v1
         with:
@@ -24,10 +26,12 @@ jobs:
           PROTOBUF_VERSION: ${{ matrix.protobuf_version }}
         run: ./install-protobuf.sh
       - name: Protoc version
-        run: PATH=/home/travis/bin:$PATH protoc --version
+        run: PATH=$HOME/bin:$PATH protoc --version
+      - name: env
+        run: env && go env && pwd
       - name: Build server all
-        run: PATH=/home/travis/bin:$PATH make buildserverall
+        run: GOPATH=$HOME/gopath GOBIN=$GOPATH/bin PATH=$HOME/bin:$GOBIN:$PATH make buildserverall
       - name: Diff check
         if: matrix.protobuf_version == '3.7.1' && matrix.go_version == '1.12.x'
         run: git status --porcelain | read || (git status; git diff; exit 1); fi
-        
+
