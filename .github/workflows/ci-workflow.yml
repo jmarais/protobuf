@@ -30,7 +30,7 @@ jobs:
       - name: env
         run: env && go env && pwd
       - name: Build server all
-        run: GOPATH=$HOME/gopath GOBIN=$GOPATH/bin PATH=$HOME/bin:$GOBIN:$PATH make buildserverall
+        run: GOPATH=/home/runner/work/protobuf/gopath GOBIN=$GOPATH/bin PATH=$HOME/bin:$GOBIN:$PATH make buildserverall
       - name: Diff check
         if: matrix.protobuf_version == '3.7.1' && matrix.go_version == '1.12.x'
         run: git status --porcelain | read || (git status; git diff; exit 1); fi
