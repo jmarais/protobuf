@@ -24,7 +24,7 @@ jobs:
         with:
           go-version: ${{ matrix.go_version }}
           
-      - name: ${{ Setup protoc matrix.protobuf_version }}
+      - name: Setup protoc ${{ matrix.protobuf_version }}
         env:
           PROTOBUF_VERSION: ${{ matrix.protobuf_version }}
         run: ./install-protobuf.sh
