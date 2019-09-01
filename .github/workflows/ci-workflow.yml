@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - merge8d0c54
 
 jobs:
   build_and_test:
