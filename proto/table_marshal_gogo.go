@@ -57,7 +57,7 @@ func makeMessageRefSliceMarshaler(u *marshalInfo) (sizer, marshaler) {
 			for i := 0; i < s.Len(); i++ {
 				elem := s.Index(i)
 				e := elem.Interface()
-				v := toAddrPointer(&e, false)
+				v := toAddrPointer(&e, false, false)
 				siz := u.size(v)
 				n += siz + SizeVarint(uint64(siz)) + tagsize
 			}
@@ -69,7 +69,7 @@ func makeMessageRefSliceMarshaler(u *marshalInfo) (sizer, marshaler) {
 			for i := 0; i < s.Len(); i++ {
 				elem := s.Index(i)
 				e := elem.Interface()
-				v := toAddrPointer(&e, false)
+				v := toAddrPointer(&e, false, false)
 				b = appendVarint(b, wiretag)
 				siz := u.size(v)
 				b = appendVarint(b, uint64(siz))

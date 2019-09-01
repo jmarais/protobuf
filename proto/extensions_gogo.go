@@ -274,7 +274,7 @@ func encodeExtension(extension *ExtensionDesc, value interface{}) ([]byte, error
 	u := getMarshalInfo(reflect.TypeOf(extension.ExtendedType))
 	ei := u.getExtElemInfo(extension)
 	v := value
-	p := toAddrPointer(&v, ei.isptr)
+	p := toAddrPointer(&v, ei.isptr, ei.deref)
 	siz := ei.sizer(p, SizeVarint(ei.wiretag))
 	buf := make([]byte, 0, siz)
 	return ei.marshaler(buf, p, ei.wiretag, false)

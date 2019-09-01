@@ -92,6 +92,7 @@ type marshalElemInfo struct {
 	sizer     sizer
 	marshaler marshaler
 	isptr     bool // elem is pointer typed, thus interface of this type is a direct interface (extension only)
+	deref     bool // dereference the pointer before operating on it; implies isptr
 }
 
 var (
@@ -450,13 +451,22 @@ func (u *marshalInfo) getExtElemInfo(desc *ExtensionDesc) *marshalElemInfo {
 		panic("tag is not an integer")
 	}
 	wt := wiretype(tags[0])
+	if t.Kind() == reflect.Ptr && t.Elem().Kind() != reflect.Struct {
+		t = t.Elem()
+	}
 	sizr, marshalr := typeMarshaler(t, tags, false, false)
+	var deref bool
+	if t.Kind() == reflect.Slice && t.Elem().Kind() != reflect.Uint8 {
+		t = reflect.PtrTo(t)
+		deref = true
+	}
 	e = &marshalElemInfo{
 		wiretag:   uint64(tag)<<3 | wt,
 		tagsize:   SizeVarint(uint64(tag) << 3),
 		sizer:     sizr,
 		marshaler: marshalr,
 		isptr:     t.Kind() == reflect.Ptr,
+		deref:     deref,
 	}
 
 	// update cache
@@ -2543,8 +2553,8 @@ func makeMapMarshaler(f *reflect.StructField) (sizer, marshaler) {
 			for _, k := range m.MapKeys() {
 				ki := k.Interface()
 				vi := m.MapIndex(k).Interface()
-				kaddr := toAddrPointer(&ki, false)             // pointer to key
-				vaddr := toAddrPointer(&vi, valIsPtr)          // pointer to value
+				kaddr := toAddrPointer(&ki, false, false)      // pointer to key
+				vaddr := toAddrPointer(&vi, valIsPtr, false)   // pointer to value
 				siz := keySizer(kaddr, 1) + valSizer(vaddr, 1) // tag of key = 1 (size=1), tag of val = 2 (size=1)
 				n += siz + SizeVarint(uint64(siz)) + tagsize
 			}
@@ -2562,8 +2572,8 @@ func makeMapMarshaler(f *reflect.StructField) (sizer, marshaler) {
 			for _, k := range keys {
 				ki := k.Interface()
 				vi := m.MapIndex(k).Interface()
-				kaddr := toAddrPointer(&ki, false)    // pointer to key
-				vaddr := toAddrPointer(&vi, valIsPtr) // pointer to value
+				kaddr := toAddrPointer(&ki, false, false)    // pointer to key
+				vaddr := toAddrPointer(&vi, valIsPtr, false) // pointer to value
 				b = appendVarint(b, tag)
 				siz := keySizer(kaddr, 1) + valCachedSizer(vaddr, 1) // tag of key = 1 (size=1), tag of val = 2 (size=1)
 				b = appendVarint(b, uint64(siz))
@@ -2632,7 +2642,7 @@ func (u *marshalInfo) sizeExtensions(ext *XXX_InternalExtensions) int {
 		// the last time this function was called.
 		ei := u.getExtElemInfo(e.desc)
 		v := e.value
-		p := toAddrPointer(&v, ei.isptr)
+		p := toAddrPointer(&v, ei.isptr, ei.deref)
 		n += ei.sizer(p, ei.tagsize)
 	}
 	mu.Unlock()
@@ -2667,7 +2677,7 @@ func (u *marshalInfo) appendExtensions(b []byte, ext *XXX_InternalExtensions, de
 
 			ei := u.getExtElemInfo(e.desc)
 			v := e.value
-			p := toAddrPointer(&v, ei.isptr)
+			p := toAddrPointer(&v, ei.isptr, ei.deref)
 			b, err = ei.marshaler(b, p, ei.wiretag, deterministic)
 			if !nerr.Merge(err) {
 				return b, err
@@ -2698,7 +2708,7 @@ func (u *marshalInfo) appendExtensions(b []byte, ext *XXX_InternalExtensions, de
 
 		ei := u.getExtElemInfo(e.desc)
 		v := e.value
-		p := toAddrPointer(&v, ei.isptr)
+		p := toAddrPointer(&v, ei.isptr, ei.deref)
 		b, err = ei.marshaler(b, p, ei.wiretag, deterministic)
 		if !nerr.Merge(err) {
 			return b, err
@@ -2743,7 +2753,7 @@ func (u *marshalInfo) sizeMessageSet(ext *XXX_InternalExtensions) int {
 
 		ei := u.getExtElemInfo(e.desc)
 		v := e.value
-		p := toAddrPointer(&v, ei.isptr)
+		p := toAddrPointer(&v, ei.isptr, ei.deref)
 		n += ei.sizer(p, 1) // message, tag = 3 (size=1)
 	}
 	mu.Unlock()
@@ -2786,7 +2796,7 @@ func (u *marshalInfo) appendMessageSet(b []byte, ext *XXX_InternalExtensions, de
 
 			ei := u.getExtElemInfo(e.desc)
 			v := e.value
-			p := toAddrPointer(&v, ei.isptr)
+			p := toAddrPointer(&v, ei.isptr, ei.deref)
 			b, err = ei.marshaler(b, p, 3<<3|WireBytes, deterministic)
 			if !nerr.Merge(err) {
 				return b, err
@@ -2824,7 +2834,7 @@ func (u *marshalInfo) appendMessageSet(b []byte, ext *XXX_InternalExtensions, de
 
 		ei := u.getExtElemInfo(e.desc)
 		v := e.value
-		p := toAddrPointer(&v, ei.isptr)
+		p := toAddrPointer(&v, ei.isptr, ei.deref)
 		b, err = ei.marshaler(b, p, 3<<3|WireBytes, deterministic)
 		b = append(b, 1<<3|WireEndGroup)
 		if !nerr.Merge(err) {
@@ -2854,7 +2864,7 @@ func (u *marshalInfo) sizeV1Extensions(m map[int32]Extension) int {
 
 		ei := u.getExtElemInfo(e.desc)
 		v := e.value
-		p := toAddrPointer(&v, ei.isptr)
+		p := toAddrPointer(&v, ei.isptr, ei.deref)
 		n += ei.sizer(p, ei.tagsize)
 	}
 	return n
@@ -2889,7 +2899,7 @@ func (u *marshalInfo) appendV1Extensions(b []byte, m map[int32]Extension, determ
 
 		ei := u.getExtElemInfo(e.desc)
 		v := e.value
-		p := toAddrPointer(&v, ei.isptr)
+		p := toAddrPointer(&v, ei.isptr, ei.deref)
 		b, err = ei.marshaler(b, p, ei.wiretag, deterministic)
 		if !nerr.Merge(err) {
 			return b, err
