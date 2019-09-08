@@ -31,3 +31,6 @@ test:
 	(protoc --proto_path=../../../../../:../../protobuf/:. --gogo_out=. registration.proto)
 	cp registration_test.go.in registration_test.go
 	go test ./...
+
+clean:
+	rm *.pb.go *_test.go

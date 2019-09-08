@@ -44,3 +44,6 @@ test:
 	go install github.com/gogo/protobuf/protoc-gen-gofast
 	protoc --gofast_out=./gofast/ vanity.proto
 	go test ./...
+
+clean:
+	rm ./gofast/*pb.go

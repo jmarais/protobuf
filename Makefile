@@ -56,6 +56,9 @@ install:
 
 clean:
 	go clean ./...
+	make -C test/issue427 clean
+	make -C test/registration clean
+	make -C vanity/test clean
 
 nuke:
 	go clean -i -cache ./...
